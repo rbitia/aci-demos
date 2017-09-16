@@ -1,0 +1,46 @@
+.jqueryTableSheet{
+  font-family: Helvetica, Arial, Verdana;
+  font-size: 12px;
+  border: 1px solid #777;
+  border-collapse:collapse;
+}
+
+.jqueryTableSheet td{
+    border: 1px solid #999;
+    padding: 10px;
+}
+
+.jqueryTableSheet .cell{
+  text-align:right;
+}
+
+.jqueryTableSheet .rowcol{
+  background-color:#e3e3e3;
+}
+
+.addremove{
+  font-size:12px;
+  font-family: Helvetica, Arial, Verdana;
+  font-style: italic;
+  color: #888;
+  line-height:0;
+}
+
+.addremove img{
+  cursor: pointer;
+}
+
+.exportbut{
+  background-color:#777;
+  font-size: 14px;
+  font-family: Helvetica, Arial, Verdana;
+  color: #fff;
+  padding: 10px;
+  display:inline;
+  cursor: pointer;
+  float:right;
+}
+
+.rowcol select{
+  width:60px;
+}
