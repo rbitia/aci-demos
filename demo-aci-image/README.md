@@ -1,10 +1,7 @@
-[![Build Status](https://travis-ci.org/p0bailey/docker-flask.svg?branch=master)](https://travis-ci.org/p0bailey/docker-flask)
-
-
 ## Creating the docker image
 1. Inside the directory run docker build 
 
-    docker build -t <image-name> .
+    `docker build -t <image-name> .`
     
 2. You should now be able to see the docker images using: `docker images`
 
