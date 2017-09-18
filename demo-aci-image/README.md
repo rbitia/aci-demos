@@ -7,11 +7,11 @@
 
 ## Running the image
 
-On Docker host run: docker run -d -p 80:80 <image-name>
+On Docker host run: `docker run -d -p 80:80 <image-name>`
 
-On Docker machine run: docker run -d -p 80:80 <image-name>
+On Docker machine run: `docker run -d -p 80:80 <image-name>`
 
-Docker compose: docker-compose up -d
+Docker compose: `docker-compose up -d`
 
 
 ### Credits
