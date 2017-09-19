@@ -1,6 +1,6 @@
 FROM ubuntu:14.04
 
-MAINTAINER Alexey Kornilov <alexey.kornilov@kavolorn.ru>
+MAINTAINER Ria Bhatia
 
 COPY faceDetection.py /
 COPY Pics /
