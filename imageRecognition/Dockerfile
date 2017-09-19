@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 MAINTAINER Ria Bhatia
 
 COPY faceDetection.py /
-COPY Pics /
+COPY images.tar.gz
 
 RUN apt-get update \
 	&& apt-get upgrade -y \
@@ -28,5 +28,7 @@ RUN cd \
 	&& make install \
 	&& cd \
 	&& rm 3.1.0.zip
+
+RUN tar xvzf images.tar.gz
 
 CMD ["python", "./faceDetection.py"]
