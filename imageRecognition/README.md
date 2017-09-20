@@ -1,2 +1,2 @@
-#Create Docker Image
-docker build -t imagerec .
+##Create Docker Image
+'docker build -t imagerec .'
