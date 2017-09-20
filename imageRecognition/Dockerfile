@@ -2,14 +2,11 @@ FROM ubuntu:14.04
 
 MAINTAINER Ria Bhatia
 
-COPY faceDetection.py /
-COPY images.tar.gz
-
 RUN apt-get update \
 	&& apt-get upgrade -y \
 	&& apt-get install -y unzip wget build-essential \
 		cmake git pkg-config libswscale-dev \
-		python3-dev python3-numpy \
+		python3-dev python3-numpy python3-pip \
 		libtbb2 libtbb-dev libjpeg-dev \
 		libpng-dev libtiff-dev libjasper-dev
 
@@ -29,6 +26,12 @@ RUN cd \
 	&& cd \
 	&& rm 3.1.0.zip
 
-RUN tar xvzf images.tar.gz
+COPY app/ /app
 
-CMD ["python", "./faceDetection.py"]
+RUN cd /app \
+	&& tar xvzf images.tar.gz
+
+RUN cd /app \
+	&& pip3 install -r ./requirements.txt
+
+CMD ["python3", "./faceDetection.py"]

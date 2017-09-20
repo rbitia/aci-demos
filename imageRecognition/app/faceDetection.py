@@ -8,14 +8,14 @@ import glob
 
 sys.path.append('/usr/local/lib/python2.7/site-packages')
 image_list = []
-for filename in glob.glob('~/Documents/pics/.jpg'): #assuming gif
+for filename in glob.glob('Pics/.jpg'): #assuming gif
     im=Image.open(filename)
     image_list.append(im)
 #add code to take in a file with multiple pictures
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 for imageNum in image_list:
-    img = cv2.imread('image_list[imageNum]')
+    img = cv2.imread(imageNum)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     for (x,y,w,h) in faces:
