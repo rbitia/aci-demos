@@ -6,9 +6,11 @@ import cv2
 from PIL import Image
 import glob
 
-sys.path.append('/usr/local/lib/python2.7/site-packages')
+print("I'm here")
+#sys.path.append('/usr/local/lib/python2.7/site-packages')
 image_list = []
-for filename in glob.glob('Pics/.jpg'): #assuming gif
+for filename in glob.glob('images/.jpg'): #assuming gif
+    print("in for loop")
     im=Image.open(filename)
     image_list.append(im)
 #add code to take in a file with multiple pictures
