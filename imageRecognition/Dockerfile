@@ -34,4 +34,4 @@ RUN cd /app \
 RUN cd /app \
 	&& pip3 install -r ./requirements.txt
 
-CMD ["python3", "./faceDetection.py"]
+CMD ["python3", "app/faceDetection.py"]
