@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>3D Area Chart - Three Graphs</title>
+    <title>ACI and K8-Connector</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/jquery.tablesheet.css">
@@ -9,16 +9,16 @@
     <link rel="stylesheet" href="css/jquery.colorpicker.css">
     <link rel="stylesheet" href="css/scenes.css">
   </head>
-  
+
   <body>
-    
+
     <div id="div-controls">
       <a href="/charts3d"><img src="img/logo_s.png"></a>
       <div class="separator_big_h"></div>
       <ul>
         <li>
           <a href="#" title="export bar chart" id="link-export">
-            <img src="img/icon_export.png" alt="Export"> Export 
+            <img src="img/icon_export.png" alt="Export"> Export
           </a>
         </li>
         <li>
@@ -28,14 +28,14 @@
         </li>
       </ul>
     </div>
-    
+
     <div id="valuelabel">
     </div>
-    
+
     <div id="div-legend">
       <h4>Chart Title</h4>
     </div>
-    
+
     <div id="div-databox">
       <h3>Edit Settings</h3>
       <h4>General Settings</h4>
@@ -43,7 +43,7 @@
         Title: <input type="text" id="charttitle" size="12">
       </div>
       <div class="left col1-4 small-text">
-        Background color: 
+        Background color:
         <input id="colorpick_bc" type="text" size="4" value="000000" />
       </div>
       <div class="left col1-4 small-text">
@@ -59,7 +59,7 @@
       <table id="datatable" class="jqueryTableSheet">
       </table>
     </div>
-    
+
     <div id="div-exportbox">
       <h3>Export chart</h3>
       <div class="separator_hid10"></div>
@@ -80,19 +80,19 @@
         Cancel
       </div>
     </div>
-    
+
     <div id="preview-footer">
       Created with <a href="http://threegraphs.com" target="_blank">threegraphs.com</a>. Powererd by <a href="http://mrdoob.github.com/three.js/" target="_blank">Three.js</a>
     </div>
-    
+
   </body>
-  
+
   <script type="text/javascript">
     chartType = "area";
     loadType = "sample";
     chartTitle = "Area Chart Sample";
   </script>
-  
+
   <script type="text/javascript" src="js/settings.js"></script>
   <script type="text/javascript" src="js/sampledata/InputDataBar.js"></script>
   <script type="text/javascript" src="js/libs/jquery-1.7.1.js"></script>
@@ -110,7 +110,7 @@
   <script type="text/javascript" src="fonts/helvetiker_bold.typeface.js"></script>
   <script type="text/javascript" src="js/scenes/scene_area.js"></script>
   <script type="text/javascript" src="js/init.js"></script>
-  
+
   <script type="text/javascript">
 
     var _gaq = _gaq || [];

@@ -6,28 +6,44 @@ import cv2
 from PIL import Image
 import glob
 
-print("I'm here")
-#sys.path.append('/usr/local/lib/python2.7/site-packages')
-image_list = []
-for filename in glob.glob('images/.jpg'): #assuming gif
-    print("in for loop")
-    im=Image.open(filename)
-    image_list.append(im)
-#add code to take in a file with multiple pictures
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-for imageNum in image_list:
-    img = cv2.imread(imageNum)
+
+def detect(img, cascade):
+    rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
+                                     flags=cv2.CASCADE_SCALE_IMAGE)
+    if len(rects) == 0:
+        return []
+    rects[:,2:] += rects[:,:2]
+    return rects
+
+image_list=[]
+
+def draw_rects(img, rects, color):
+    for x1, y1, x2, y2 in rects:
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+count = 0
+print("am i here4")
+for filename in glob.glob('app/Pics/*.jpg'):
+    print(filename)
+    img = cv2.imread(filename)
+    print("wtf")
+    image_list.append(img)
+    cascade = cv2.CascadeClassifier('app/haarcascade_frontalface_default.xml')
+    #eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+    print("am i here2")
+    #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    for (x,y,w,h) in faces:
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-        for (ex,ey,ew,eh) in eyes:
-            cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-    cv2.imshow('img',img)
-    #
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    gray = cv2.equalizeHist(gray)
+    #faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    rects = detect(gray, cascade)
+    if rects != []:
+        count= count+1
+    print("am i here1")
+for img in image_list:
+    vis = img.copy()
+    draw_rects(vis, rects, (0, 255, 0))
+#    cv2.imshow('faceDetection', vis)
+#    if cv2.waitKey(5) == 27:
+#            break
+#cv2.destroyAllWindows()
+print(count)
