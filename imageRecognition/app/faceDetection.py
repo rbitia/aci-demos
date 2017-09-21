@@ -1,4 +1,4 @@
-#source http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html
+#by ria bhatia with help from OpenCV tutorials 
 #this code is to be used for demo purposes only
 import sys
 import numpy as np
@@ -26,11 +26,9 @@ print("am i here4")
 for filename in glob.glob('app/Pics/*.jpg'):
     print(filename)
     img = cv2.imread(filename)
-    print("wtf")
     image_list.append(img)
     cascade = cv2.CascadeClassifier('app/haarcascade_frontalface_default.xml')
     #eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-    print("am i here2")
     #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
@@ -38,7 +36,6 @@ for filename in glob.glob('app/Pics/*.jpg'):
     rects = detect(gray, cascade)
     if rects != []:
         count= count+1
-    print("am i here1")
 for img in image_list:
     vis = img.copy()
     draw_rects(vis, rects, (0, 255, 0))
@@ -46,4 +43,5 @@ for img in image_list:
 #    if cv2.waitKey(5) == 27:
 #            break
 #cv2.destroyAllWindows()
+print("Number of pictures with faces:")
 print(count)
