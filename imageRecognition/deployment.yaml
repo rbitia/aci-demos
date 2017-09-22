@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: facial-recognition
-          image: rbitia/facialRecognitionDemo:latest
+          image: rbitia/aci-demo:latest
           imagePullPolicy: Always
       dnsPolicy: ClusterFirst
       # Tolerate the ACI taint to get the scheduler to schedule it.
