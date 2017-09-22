@@ -12,6 +12,7 @@ from PIL import Image
 import glob
 import os
 import time
+from paramiko import SSHClient
 
 start_time = time.time()                        # Start the timer
 
@@ -30,7 +31,8 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
 count = 0
-
+#make a request
+# 
 for filename in glob.glob('app/Pics/*.jpg'):    # Go through the folder with pictures
     print(filename)
     entirePath= filename
@@ -52,7 +54,7 @@ for filename in glob.glob('app/Pics/*.jpg'):    # Go through the folder with pic
 for img in image_list:
     vis = img.copy()
     draw_rects(vis, rects, (0, 255, 0))
-    
+
 #    cv2.imshow('faceDetection', vis)
 #    if cv2.waitKey(5) == 27:
 #            break
@@ -63,5 +65,5 @@ print(count)
 totalTime = str((time.time() - start_time))
 print("--- %s seconds ---" % totalTime)
 fileTime= open("time.txt","w")
-fileTime.write('I like pie' + totalTime)
+#fileTime.write('I like pie' + totalTime)
 fileTime.close()

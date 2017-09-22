@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: aci-demo-service
+spec:
+  selector:
+    app: collectionApp
+  ports:
+  -name: http
+   protocol: TCP
+   port: 80
+   targetPort:9376
