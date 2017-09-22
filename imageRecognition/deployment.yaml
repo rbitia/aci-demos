@@ -1,21 +1,21 @@
-apiVersion: demo/betav1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: facialRecognition
+  name: facial-recognition
   namespace: default
 spec:
   replicas: 100
   template:
     metadata:
       labels:
-        app: facialRecognition
-spec:
-  containers:
-  -name: facialRecognition
-   image: rbitia/facialRecognitionDemo:latest
-   imagePullPolicy: Always
-   dnsPolicy: ClusterFirst
-   # Tolerate the ACI taint to get the scheduler to schedule it.
-   tolerations:
-   - key: azure.com/aci
-     effect: NoSchedule
+        app: facial-recognition
+    spec:
+      containers:
+        - name: facial-recognition
+          image: rbitia/facialRecognitionDemo:latest
+          imagePullPolicy: Always
+      dnsPolicy: ClusterFirst
+      # Tolerate the ACI taint to get the scheduler to schedule it.
+      tolerations:
+      - key: azure.com/aci
+        effect: NoSchedule
