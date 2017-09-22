@@ -33,7 +33,7 @@ clone this repo
 `cd imageRecogniton`
 
 deploy the pods 
-`kubectl deploy deployment.yaml`
+`kubectl create -f deployment.yaml`
 
 use the same rg for aci or a new one 
 `az group create -n aci-test -l westus`
