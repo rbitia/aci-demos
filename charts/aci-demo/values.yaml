@@ -1,0 +1,35 @@
+# Settings for the UI
+ui:
+  replicaCount: 1
+  image: "rbitia/aci-ui:latest"
+  pullPolicy: IfNotPresent
+
+# Settings for the facial image recognizer
+imageRecognizer:
+  image: "rbitia/aci-demo:latest"
+  # I cut this from 100 because that was taking a long time to spin up and delete.
+  # You can override this on the CLI with `--set imageRecognizer.replicas=100`
+  replicas: 20
+
+# Settings for the service.
+service:
+  name: facial-recognition
+  type: LoadBalancer
+  externalPort: 80
+  internalPort: 80
+
+# If you decide to use an Ingress instead ofa  LoadBalancer service, enable this.
+ingress:
+  enabled: false
+  # Used to create an Ingress record.
+  hosts:
+    - chart-example.local
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+resources: {}

@@ -1,0 +1,25 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "fullname" . }}-ir
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.imageRecognizer.replicas }}
+  template:
+    metadata:
+      labels:
+        app: facial-recognition
+    spec:
+      containers:
+        - name: facial-recognition
+          image: {{ default "rbitia/facialRecognitionDemo:latest" .Values.imageRecognizer.image }}
+          imagePullPolicy: Always
+      dnsPolicy: ClusterFirst
+      # Tolerate the ACI taint to get the scheduler to schedule it.
+      tolerations:
+      - key: azure.com/aci
+        effect: NoSchedule
