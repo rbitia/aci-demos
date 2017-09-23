@@ -61,7 +61,6 @@ def getProgress():
         }
         info.append(obj)
 
-
     data = json.dumps(info)
 
     return  request.args.get('callback') + "(" +  data + ")"

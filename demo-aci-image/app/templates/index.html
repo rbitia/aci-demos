@@ -101,8 +101,8 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Number of Pictures Processed</p>
-                                            15k
+                                            <p>Pictures Processed</p>
+                                            <span id="pic-num">15k</span>
                                         </div>
                                     </div>
                                 </div>
@@ -141,82 +141,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-warning text-center">
-                                            <i class="ti-timer"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>Time to Complete Work</p>
-                                            15s
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr />
-                                    <div class="stats">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-success text-center">
-                                            <i class="ti-image"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>Number of Pictures Processed</p>
-                                            $1,345
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr />
-                                    <div class="stats">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-danger text-center">
-                                            <i class="ti-stats-up"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>Cost Analysis With ACI</p>
-                                            23 boppers
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr />
-                                    <div class="stats">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
 
                     <div class="col-md-9">
@@ -227,7 +151,7 @@
                             </div>
                             <div class="content">
                                 <div class="row">
-                                    <div class="col-md-3 offset-md-3">
+                                    <div class="col-md-4 offset-md-3">
                                         <div id="detection-pics" class="card main-card">
                                             <div class="content">
                                                     <div class="row">
@@ -245,7 +169,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 offset-md-3">
+                                    <div class="col-md-4 offset-md-3">
                                         <div id="all-pics" class="card main-card">
                                             <div class="content">
                                                     <div class="row">
@@ -256,7 +180,7 @@
                                                         </div>
                                                         <div class="col-xs-7">
                                                             <div class="numbers">
-                                                               All Pictures
+                                                               No Faces
                                                             </div>
                                                         </div>
                                                     </div>
@@ -493,43 +417,35 @@
                         "Access-Control-Allow-Headers": "origin, content-type, accept"
                     },
                     success: function (data, textStatus, jqXHR) {
-                        console.log("in");
-                        //var data = JSON.parse(responseData['AuthenticateUserResult']);
-                        console.log(data);
+                        var detected = 1;
+                        var all = 1;
+
+                        $("#pic-num").text(data.length)
+
+
+                        for(var i = 0; i < data.length; i++){
+                            if(data[i].detected == 1 && detected < 13){
+
+                                $("#d-" + detected).attr('src',"static/Pics/" + data[i].filename.slice(2));
+                                detected++;
+
+                            }
+                            else if(all < 13){
+
+                                $("#all-" + all).attr('src',"static/Pics/" + data[i].filename.slice(2));
+                                all++;
+                            }
+                            else{
+                                break;
+                            }
+                        }
                     },
                     error: function (responseData, textStatus, errorThrown) {
                         console.log(errorThrown)
-                        alert('POST failed.');
+                        console.log('POST failed.');
                     }
                 });
 
-
-                // $.getJSON( "http://localhost:8000/getProgress").done( function( data ) {
-                //     //The response from the other stuff is in data var
-                //     console.log(data);
-                //     var detected = 1;
-                //     var all = 1;
-
-                //     for(var i = 0; i < data.length; i++){
-                //         if(data[i].detected == 1 && detected < 13){
-
-                //             $("#d-" + detected).attr('src',"static/Pics/" + data[i].filename);
-
-                //         }
-                //         else if(all < 13){
-
-                //             $("#all-" + all).attr('src',"static/Pics/" + data[i].filename);
-
-                //         }
-                //         else{
-                //             break;
-                //         }
-                //     }
-
-                //     data.forEach(function(element) {
-
-                //     }, this);
-                // });
             });
 
 
