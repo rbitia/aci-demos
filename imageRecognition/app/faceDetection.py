@@ -12,7 +12,8 @@ from PIL import Image
 import glob
 import os
 import time
-from paramiko import SSHClient
+import httplib
+import requests
 
 start_time = time.time()                        # Start the timer
 
@@ -30,9 +31,16 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
     for x1, y1, x2, y2 in rects:
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
+def httpRequest(url, filename):
+    r = requests.get(url)
+    print(r.raise_for_status())
+    #grab the filename request
+
+
+
 count = 0
 #make a request
-# 
+httpRequest(urlName)
 for filename in glob.glob('app/Pics/*.jpg'):    # Go through the folder with pictures
     print(filename)
     entirePath= filename
