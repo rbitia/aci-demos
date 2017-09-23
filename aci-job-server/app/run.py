@@ -16,13 +16,13 @@ def index():
     cursor = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1")
 
     row = cursor.fetchone()
-    
+
     id = row[0]
     filename = row[1]
 
     conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";" )
     conn.commit()
-    
+
     test = {'filename': filename}
 
     conn.close()
@@ -61,7 +61,10 @@ def getProgress():
         }
         info.append(obj)
 
-    return json.dumps(info)
+
+    data = json.dumps(info)
+
+    return  request.args.get('callback') + "(" +  data + ")"
 
 
 
@@ -70,10 +73,10 @@ def getProgress():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=80)
+    app.run(host='0.0.0.0',port=8000)
 
 
-#Going fast so just thowing this here for now 
+#Going fast so just thowing this here for now
 # '''
 # CREATE TABLE jobs (
 #     id INTEGER PRIMARY KEY AUTOINCREMENT,
