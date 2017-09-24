@@ -11,12 +11,26 @@ imageRecognizer:
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
   replicas: 20
 
+imageRecognizerCluster:
+  image: "rbitia/aci-demo:latest"
+  replicas: 50
+
+webserver:
+  replicaCount: 1
+  image: "rbitia/aci-webserver:latest"
+
 # Settings for the service.
 service:
   name: facial-recognition
   type: LoadBalancer
   externalPort: 80
   internalPort: 80
+
+service:
+  name: web-server
+  type: LoadBalancer
+  externalPort: 83
+  internalPort: 8080
 
 # If you decide to use an Ingress instead ofa  LoadBalancer service, enable this.
 ingress:
