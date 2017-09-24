@@ -7,22 +7,20 @@ import json
 import sqlite3
 import requests
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
-    print("yo")
+
     conn = sqlite3.connect('jobs.db')
 
     cursor = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1")
 
-    print("hello1")
     row = cursor.fetchone()
 
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
-    print("hello")
 
     if(cursor.fetchone()[2] == 0):
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -47,7 +45,6 @@ def processed():
     filename = request.args.get('filename')
     detected = request.args.get('detected')
 
-
     if(detected == "true"):
         det = 1
     else:
@@ -67,33 +64,60 @@ def getProgress():
     cursor = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;")
     cursor2 = conn.execute("SELECT * FROM time WHERE id = 1;")
 
-
     start_time = datetime.strptime(cursor2.fetchone()[1],'%Y-%m-%d %H:%M:%S')
     total_time = (current_time - start_time).total_seconds()
-
-    print(total_time)
 
     pictures = []
 
     for row in cursor:
         obj = {
-            "filename": row[1],
+            "filename": row[1][2:],
             "detected": row[3]
         }
         pictures.append(obj)
 
     data = {
         "pictures": pictures,
-        "total_time": total_time
+        "total_time": int(total_time)
     }
 
     json_data = json.dumps(data)
 
     return  request.args.get('callback') + "(" +  json_data + ")"
 
+def setupDatabase():
+    conn = sqlite3.connect('jobs.db')
 
+    conn.execute('''DROP TABLE IF EXISTS jobs;''')
+    conn.execute('''
+        CREATE TABLE jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename NOT NULL,
+            processed INTEGER DEFAULT 0 NOT NULL,
+            detected INTEGER DEFAULT NULL
+        );
+        ''')
+
+    conn.execute('DROP TABLE IF EXISTS time;')
+    conn.execute('''
+        CREATE TABLE time (
+        id INTEGER PRIMARY KEY,
+        start_time TEXT,
+        started INTEGER
+    );
+    ''')
+
+    conn.execute('INSERT INTO time values(1,CURRENT_TIME,0);')
+
+    for root, dirs, files in os.walk('./Pics'):
+        for filename in files:
+            conn.execute("INSERT INTO jobs (filename) \
+            VALUES (\"" + filename + "\");")
+
+    conn.commit()
 
 if __name__ == '__main__':
+    setupDatabase()
     app.run(debug=True,host='0.0.0.0',port=8000)
 
 
