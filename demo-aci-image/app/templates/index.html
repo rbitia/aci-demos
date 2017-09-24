@@ -406,12 +406,10 @@
             $(function(){
 
 
-
-
                 $.ajax({
                     type: 'GET',
                     dataType: "jsonp",
-                    url: "http://localhost:8000/getProgress",
+                    url: "http://{{jobserver_url}}/getProgress",
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         "Access-Control-Allow-Headers": "origin, content-type, accept"

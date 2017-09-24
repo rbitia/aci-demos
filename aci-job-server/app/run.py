@@ -20,6 +20,12 @@ def index():
 
     row = cursor.fetchone()
 
+    if(row == None):
+        return json.dumps({
+            'filename':"NULL",
+            'processed':1
+            })
+
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
 
     if(cursor.fetchone()[2] == 0):
@@ -33,11 +39,9 @@ def index():
     conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";" )
     conn.commit()
 
-    test = {'filename': filename}
-
     conn.close()
 
-    return json.dumps(test)
+    return json.dumps({'filename': filename,'processed': 0})
 
 @app.route('/processed')
 def processed():
@@ -46,11 +50,10 @@ def processed():
     detected = request.args.get('detected')
 
     if(detected == "true"):
-        det = 1
+        conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
     else:
-        det = 0
+        conn.execute("UPDATE jobs set detected = 0 where filename = \"" + filename + "\";" )
 
-    conn.execute("UPDATE jobs set detected = " + str(det) + " where filename = \"" + filename + "\";" )
     conn.commit()
 
     conn.close()
@@ -71,7 +74,7 @@ def getProgress():
 
     for row in cursor:
         obj = {
-            "filename": row[1][2:],
+            "filename": row[1],
             "detected": row[3]
         }
         pictures.append(obj)
@@ -107,10 +110,12 @@ def setupDatabase():
     );
     ''')
 
-    conn.execute('INSERT INTO time values(1,CURRENT_TIME,0);')
+    conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24",0);')
 
     for root, dirs, files in os.walk('./Pics'):
         for filename in files:
+            if(filename[:2] == "._"):
+                filename = filename[2:]
             conn.execute("INSERT INTO jobs (filename) \
             VALUES (\"" + filename + "\");")
 
@@ -118,6 +123,6 @@ def setupDatabase():
 
 if __name__ == '__main__':
     setupDatabase()
-    app.run(debug=True,host='0.0.0.0',port=8000)
+    app.run(debug=True,host='0.0.0.0',port=80)
 
 

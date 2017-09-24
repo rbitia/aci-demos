@@ -18,10 +18,10 @@ for root, dirs, files in os.walk('./Pics'):
 #     detected INTEGER DEFAULT NULL
 # );
 
-CREATE TABLE time (
-    id INTEGER PRIMARY KEY,
-    start_time TEXT,
-    started INTEGER
-);
+# CREATE TABLE time (
+#     id INTEGER PRIMARY KEY,
+#     start_time TEXT,
+#     started INTEGER
+# );
 
 # INSERT INTO time values(1,CURRENT_TIME,0);
