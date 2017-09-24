@@ -12,7 +12,6 @@ from PIL import Image
 import glob
 import os
 import time
-import httplib
 import requests
 
 start_time = time.time()                        # Start the timer
@@ -31,47 +30,46 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
     for x1, y1, x2, y2 in rects:
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
-def httpRequest(url, filename):
+def getFilename(url):
     r = requests.get(url)
-    print(r.raise_for_status())
+    return r.json()
+
     #grab the filename request
+def sendRes(url, filename, detected):
+    r = requests.get(url + "/processed", params={
+            "detected":detected,
+            "filename":filename
+        })
+    #r = requests.get(url + "?filename=" + filename + "&detected=" + detected)
 
 
-
-count = 0
 #make a request
-httpRequest(urlName)
-for filename in glob.glob('app/Pics/*.jpg'):    # Go through the folder with pictures
-    print(filename)
-    entirePath= filename
-    countstr= str(count)
-    detectedPath = "app/detectedFaces/face" + countstr + ".jpg"
-    img = cv2.imread(filename)
-    image_list.append(img)
-    cascade = cv2.CascadeClassifier('app/haarcascade_frontalface_default.xml')
+jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
+
+while True:
+
+    response = getFilename(jobserver_url)
+
+    if(response['processed'] == 1):
+        break
+
+    filename = response['filename']
+    realFilename = filename
+
+
+    if(filename[:2] == "._"):
+        filename = filename[2:]
+
+    img = cv2.imread("./Pics/" + filename)
+    cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     rects = detect(gray, cascade)
 
-    if rects != []:
-        count= count+1                          # Count the number of images with faces
-        os.rename(entirePath, detectedPath)
-        print("Detected faces:")
-        print(detectedPath)
+    if rects != []:                        # Count the number of images with faces
+        sendRes(jobserver_url,realFilename,"true")
+    else:
+        sendRes(jobserver_url,realFilename,"false")
 
-for img in image_list:
-    vis = img.copy()
-    draw_rects(vis, rects, (0, 255, 0))
 
-#    cv2.imshow('faceDetection', vis)
-#    if cv2.waitKey(5) == 27:
-#            break
-#cv2.destroyAllWindows()
 
-print("Number of pictures with faces:")
-print(count)
-totalTime = str((time.time() - start_time))
-print("--- %s seconds ---" % totalTime)
-fileTime= open("time.txt","w")
-#fileTime.write('I like pie' + totalTime)
-fileTime.close()
