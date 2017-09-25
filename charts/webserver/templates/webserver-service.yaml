@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: {{ .Values.webserver.service.name }}
   selector:
-    app: {{ template "name" . }}-ui
+    app: {{ template "name" . }}-webserver
     release: {{ .Release.Name }}

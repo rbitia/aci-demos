@@ -19,6 +19,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.ui.image }}"
           imagePullPolicy: {{ .Values.ui.pullPolicy }}
+          env:
+          - name: IP_JOB_SERVER
+            value: {{ .Values.ui.webServerIP }}:{{ .Values.ui.webServerPort }}
           ports:
             - containerPort: {{ .Values.ui.service.internalPort }}
           livenessProbe:

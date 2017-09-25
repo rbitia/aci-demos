@@ -8,6 +8,8 @@ ui:
     type: LoadBalancer
     externalPort: 80
     internalPort: 80
+  webServerIP: 13.84.183.86
+  webServerPort: 80
 
 # Settings for the facial image recognizer
 imageRecognizer:
@@ -16,18 +18,8 @@ imageRecognizer:
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
   replicas: 3
   inClusterReplicas: 2
-  webServerIP: 52.191.166.167
+  webServerIP: 52.171.221.66
   webServerPort: 80
-
-webserver:
-  replicaCount: 1
-  image: "rbitia/aci-webserver:latest"
-  service:
-    name: web-server
-    type: LoadBalancer
-    externalPort: 80
-    internalPort: 80
-
 
 
 # If you decide to use an Ingress instead ofa  LoadBalancer service, enable this.
