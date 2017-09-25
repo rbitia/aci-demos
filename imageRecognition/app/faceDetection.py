@@ -31,7 +31,19 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
 def getFilename(url):
-    r = requests.get(url)
+
+    try:
+        r = requests.get(url)
+    except:
+        return False
+
+
+    if(r == None):
+        return False
+
+    if(r.status_code != 200):
+        return False
+
     return r.json()
 
     #grab the filename request
@@ -46,9 +58,17 @@ def sendRes(url, filename, detected):
 #make a request
 jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
 
+counter = 0
+
 while True:
 
     response = getFilename(jobserver_url)
+
+    if(response == False):
+        counter += 1
+        if(counter > 2000):
+            break
+        continue
 
     if(response['processed'] == 1):
         break
