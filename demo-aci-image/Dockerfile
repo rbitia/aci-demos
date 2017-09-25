@@ -18,4 +18,7 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
     && chown -R www-data:www-data /var/www/app \
     && chown -R www-data:www-data /var/log
 
+RUN cd /var/www/app/static \
+    && tar xvzf Pics.tar.gz
+
 CMD ["/usr/bin/supervisord"]
