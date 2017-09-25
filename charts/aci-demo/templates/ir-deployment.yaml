@@ -18,6 +18,9 @@ spec:
         - name: facial-recognition
           image: {{ default "rbitia/facialRecognitionDemo:latest" .Values.imageRecognizer.image }}
           imagePullPolicy: Always
+          env:
+          - name: IP_JOB_SERVER
+            value: {{ .Values.imageRecognizer.webServerIP }}:{{ .Values.imageRecognizer.webServerPort }}
       dnsPolicy: ClusterFirst
       # Tolerate the ACI taint to get the scheduler to schedule it.
       tolerations:

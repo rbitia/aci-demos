@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ template "name" . }}-ui
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -20,18 +20,18 @@ spec:
           image: "{{ .Values.ui.image }}"
           imagePullPolicy: {{ .Values.ui.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.internalPort }}
+            - containerPort: {{ .Values.ui.service.internalPort }}
           livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.internalPort }}
+              port: {{ .Values.ui.service.internalPort }}
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.internalPort }}
+              port: {{ .Values.ui.service.internalPort }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- if .Values.nodeSelector }}
+{{ toYaml .Values.ui.resources | indent 12 }}
+    {{- if .Values.ui.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
+{{ toYaml .Values.ui.nodeSelector | indent 8 }}
     {{- end }}
