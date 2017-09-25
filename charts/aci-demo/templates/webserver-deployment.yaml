@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-webserver
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.webserver.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}-webserver
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.webserver.image }}"
+          imagePullPolicy: {{ .Values.webserver.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.webserver.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.webserver.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.webserver.service.internalPort }}
+          resources:
+{{ toYaml .Values.webserver.resources | indent 12 }}
+    {{- if .Values.webserver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.webserver.nodeSelector | indent 8 }}
+    {{- end }}
