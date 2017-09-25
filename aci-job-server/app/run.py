@@ -18,11 +18,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    handler = RotatingFileHandler('logs/log.log', maxBytes=10000, backupCount=1)
-    handler.setLevel(logging.INFO)
-    app.logger.addHandler(handler)
+    # handler = RotatingFileHandler('logs/log.log', maxBytes=10000, backupCount=1)
+    # handler.setLevel(logging.INFO)
+    # app.logger.addHandler(handler)
 
-    app.logger.error('Getting filename from database')
+    #app.logger.error('Getting filename from database')
 
     if not os.path.isfile('jobs.db'):
         setupDatabase()
@@ -136,10 +136,6 @@ def setupDatabase():
     conn.commit()
 
 if __name__ == '__main__':
-    #setupDatabase()
-    # handler = RotatingFileHandler('logs/log.log', maxBytes=10000, backupCount=1)
-    # handler.setLevel(logging.INFO)
-    # app.logger.addHandler(handler)
     app.run(debug=True,host='0.0.0.0',port=80)
 
 
