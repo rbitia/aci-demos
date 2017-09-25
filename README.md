@@ -24,17 +24,9 @@ get creds
 make sure you're connected 
 `kubectl get nodes`
 
-get the demo image
-`docker pull rbitia/aci-demo`
+go into the charts folder in this repo and deploy the helm chart
 
-clone this repo
-`git clone https:github.com/rbitia/aci-demos.git`
-
-`cd imageRecogniton`
-
-deploy the pods 
-`kubectl create -f deployment.yaml`
-
+now let's deploy aci 
 use the same rg for aci or a new one 
 `az group create -n aci-test -l westus`
 
@@ -51,4 +43,8 @@ edit your yaml file from within the aci-connector folder
 
 deploy the aci-connector 
 `kubectl create -f examples/aci-connector.yaml`
+
+go into the charts folder in this repo and deploy the helm chart
+
+checkout https://localhost:80
 
