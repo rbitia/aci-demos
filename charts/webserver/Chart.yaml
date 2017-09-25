@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Image Recongition demo for ACI - webserver deployment
+name: aci-webserver
+version: 0.1.0
