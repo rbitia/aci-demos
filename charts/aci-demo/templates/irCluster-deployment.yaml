@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: facial-recognition
-          image: {{ default "rbitia/facialRecognitionDemo:latest" .Values.imageRecognizerCluster.image }}
+          image: {{ default "rbitia/aci-demo:latest" .Values.imageRecognizerCluster.image }}
           imagePullPolicy: Always
       dnsPolicy: ClusterFirst
       # Tolerate the ACI taint to get the scheduler to schedule it.
