@@ -4,9 +4,9 @@ imageRecognizer:
   image: "rbitia/aci-demo:latest"
   # I cut this from 100 because that was taking a long time to spin up and delete.
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
-  replicas: 3
+  replicas: 1
   inClusterReplicas: 2
-  webServerIP: 13.65.85.219
+  webServerIP: 104.214.37.183
   webServerPort: 80
 
 

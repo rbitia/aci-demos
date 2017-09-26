@@ -8,7 +8,7 @@ ui:
     type: LoadBalancer
     externalPort: 80
     internalPort: 80
-  webServerIP: 13.66.33.93
+  webServerIP: 104.214.37.183
   webServerPort: 80
 
 
@@ -27,4 +27,3 @@ ingress:
     #   hosts:
     #     - chart-example.local
 resources: {}
-
