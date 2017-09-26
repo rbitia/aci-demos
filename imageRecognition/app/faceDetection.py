@@ -57,7 +57,7 @@ def sendRes(url, filename, detected):
             "detected":detected,
             "filename":filename
         })
-    #r = requests.get(url + "?filename=" + filename + "&detected=" + detected)
+
 
 
 #make a request
