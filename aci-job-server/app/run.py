@@ -70,6 +70,7 @@ def processed():
 def resetDb():
     conn = sqlite3.connect('jobs.db')
     conn.execute("UPDATE jobs set detected = NULL, processed = 0;" )
+    conn.execute("UPDATE time set started = 0;" )
     conn.commit()
 
     return "The database has been reset, no worries, hope you ment to do that, theres no going back man"
