@@ -9,13 +9,26 @@ import requests
 from datetime import datetime
 import os
 
+
+import logging
+from logging.handlers import RotatingFileHandler
+
 app = Flask(__name__)
+
 
 @app.route('/')
 def index():
+    # handler = RotatingFileHandler('logs/log.log', maxBytes=10000, backupCount=1)
+    # handler.setLevel(logging.INFO)
+    # app.logger.addHandler(handler)
 
+    #app.logger.error('Getting filename from database')
+
+    if not os.path.isfile('jobs.db'):
+        setupDatabase()
+    
     conn = sqlite3.connect('jobs.db')
-
+ 
     cursor = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1")
 
     row = cursor.fetchone()
@@ -23,7 +36,7 @@ def index():
     if(row == None):
         return json.dumps({
             'filename':"NULL",
-            'processed':1
+            'processed':1,
             })
 
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
@@ -89,6 +102,7 @@ def getProgress():
     return  request.args.get('callback') + "(" +  json_data + ")"
 
 def setupDatabase():
+    app.logger.error('The database was called')
     conn = sqlite3.connect('jobs.db')
 
     conn.execute('''DROP TABLE IF EXISTS jobs;''')
@@ -122,7 +136,6 @@ def setupDatabase():
     conn.commit()
 
 if __name__ == '__main__':
-    setupDatabase()
     app.run(debug=True,host='0.0.0.0',port=80)
 
 
