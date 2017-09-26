@@ -2,26 +2,39 @@ import os
 import sqlite3
 
 
-conn = sqlite3.connect('jobs.db')
+def setupDatabase():
+    conn = sqlite3.connect('jobs.db')
 
-for root, dirs, files in os.walk('./Pics'):
-  for filename in files:
-        conn.execute("INSERT INTO jobs (filename) \
-        VALUES (\"" + filename + "\");")
+    conn.execute('''DROP TABLE IF EXISTS jobs;''')
+    conn.execute('''
+        CREATE TABLE jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename NOT NULL,
+            processed INTEGER DEFAULT 0 NOT NULL,
+            detected INTEGER DEFAULT NULL
+        );
+        ''')
 
-#conn.commit()
+    conn.execute('DROP TABLE IF EXISTS time;')
+    conn.execute('''
+        CREATE TABLE time (
+        id INTEGER PRIMARY KEY,
+        start_time TEXT,
+        started INTEGER
+    );
+    ''')
 
-# CREATE TABLE jobs (
-#     id INTEGER PRIMARY KEY AUTOINCREMENT,
-#     filename NOT NULL,
-#     processed INTEGER DEFAULT 0 NOT NULL,
-#     detected INTEGER DEFAULT NULL
-# );
+    conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24",0);')
 
-# CREATE TABLE time (
-#     id INTEGER PRIMARY KEY,
-#     start_time TEXT,
-#     started INTEGER
-# );
+    for root, dirs, files in os.walk('./Pics'):
+        for filename in files:
+            if(filename[:2] == "._"):
+                filename = filename[2:]
+            conn.execute("INSERT INTO jobs (filename) \
+            VALUES (\"" + filename + "\");")
 
-# INSERT INTO time values(1,CURRENT_TIME,0);
+    conn.commit()
+
+    
+if __name__ == '__main__':
+  setupDatabase()

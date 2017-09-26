@@ -29,15 +29,23 @@ def index():
     
     conn = sqlite3.connect('jobs.db')
  
-    cursor = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1")
 
-    row = cursor.fetchone()
+    row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
+    jobsExistCheck = conn.execute("SELECT * FROM jobs WHERE processed = 1 LIMIT 1;").fetchone()
 
-    if(row == None):
+    #There are images in the database but they are all processed 
+    if(row == None and jobsExistCheck != None):
         return json.dumps({
             'filename':"NULL",
             'processed':1,
             })
+    
+    #There are no images in the database, somethings def messed up man
+    if(row == None and jobsExistCheck == None):
+        return json.dumps({
+            'filename':"NOT IMAGES IN DATABASE",
+            'processed':1,
+        })
 
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
 
