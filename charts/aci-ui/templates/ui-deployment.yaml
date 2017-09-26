@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-ui
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.ui.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}-ui
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.ui.image }}"
+          imagePullPolicy: {{ .Values.ui.pullPolicy }}
+          env:
+          - name: IP_JOB_SERVER
+            value: {{ .Values.ui.webServerIP }}:{{ .Values.ui.webServerPort }}
+          ports:
+            - containerPort: {{ .Values.ui.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ui.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.ui.service.internalPort }}
+          resources:
+{{ toYaml .Values.ui.resources | indent 12 }}
+    {{- if .Values.ui.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.ui.nodeSelector | indent 8 }}
+    {{- end }}

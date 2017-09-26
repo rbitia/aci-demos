@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-ui
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.ui.service.type }}
+  ports:
+    - port: {{ .Values.ui.service.externalPort }}
+      targetPort: {{ .Values.ui.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.ui.service.name }}
+  selector:
+    app: {{ template "name" . }}-ui
+    release: {{ .Release.Name }}
