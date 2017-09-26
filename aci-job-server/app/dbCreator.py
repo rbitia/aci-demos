@@ -20,11 +20,13 @@ def setupDatabase():
         CREATE TABLE time (
         id INTEGER PRIMARY KEY,
         start_time TEXT,
+        finish_time TEXT,
+        finished INTEGER,
         started INTEGER
     );
     ''')
 
-    conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24",0);')
+    conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24","2017-09-23 18:28:24",0,0);')
 
     for root, dirs, files in os.walk('./Pics'):
         for filename in files:

@@ -27,15 +27,18 @@ def index():
 
 
     if(row == None ):
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        conn.execute("UPDATE time set finished = 1, finish_time = \""+ current_time +"\" where id = 1;")
+        conn.commit()
+
         return json.dumps({
             'filename':"NULL",
             'processed':1,
         })
-    
 
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
 
-    if(cursor.fetchone()[2] == 0):
+    if(cursor.fetchone()[4] == 0):
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("UPDATE time set started = 1, start_time = \""+ current_time +"\" where id = 1;")
         conn.commit()
@@ -70,7 +73,7 @@ def processed():
 def resetDb():
     conn = sqlite3.connect('jobs.db')
     conn.execute("UPDATE jobs set detected = NULL, processed = 0;" )
-    conn.execute("UPDATE time set started = 0;" )
+    conn.execute("UPDATE time set started = 0, finished = 0;" )
     conn.commit()
 
     return "The database has been reset, no worries, hope you ment to do that, theres no going back man"
@@ -81,9 +84,14 @@ def getProgress():
 
     conn = sqlite3.connect('jobs.db')
     cursor = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;")
-    cursor2 = conn.execute("SELECT * FROM time WHERE id = 1;")
+    time_data = conn.execute("SELECT * FROM time WHERE id = 1;").fetchone()
 
-    start_time = datetime.strptime(cursor2.fetchone()[1],'%Y-%m-%d %H:%M:%S')
+    start_time = datetime.strptime(time_data[1],'%Y-%m-%d %H:%M:%S')
+
+    if(time_data[3] == 1):
+        current_time = datetime.strptime(time_data[2],'%Y-%m-%d %H:%M:%S')
+
+
     total_time = (current_time - start_time).total_seconds()
 
     pictures = []
