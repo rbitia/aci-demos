@@ -13,6 +13,7 @@ import glob
 import os
 import time
 import requests
+import time
 
 sys.stderr.write('start here \n')
 start_time = time.time()                        # Start the timer
@@ -70,10 +71,7 @@ while True:
     response = getFilename(jobserver_url)
 
     if(response == False):
-        counter += 1
-        if(counter > 2000):
-            sys.stderr.write('counter >2000')
-            break
+        time.sleep(2)
         continue
 
     if(response['processed'] == 1):
