@@ -8,7 +8,7 @@ ui:
     type: LoadBalancer
     externalPort: 80
     internalPort: 80
-  webServerIP: 13.66.52.84
+  webServerIP: 13.65.85.219
   webServerPort: 80
 
 # Settings for the facial image recognizer
@@ -18,7 +18,7 @@ imageRecognizer:
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
   replicas: 3
   inClusterReplicas: 2
-  webServerIP: 113.66.52.84
+  webServerIP: 13.65.85.219
   webServerPort: 80
 
 
