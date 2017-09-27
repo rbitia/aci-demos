@@ -1,11 +1,13 @@
-
-# Settings for the facial image recognizer
-imageRecognizer:
-  image: "rbitia/aci-demo:latest"
-  # I cut this from 100 because that was taking a long time to spin up and delete.
-  # You can override this on the CLI with `--set imageRecognizer.replicas=100`
-  replicas: 1
-  inClusterReplicas: 2
+# Settings for the UI
+ui:
+  replicaCount: 1
+  image: "rbitia/aci-ui:latest"
+  pullPolicy: Always
+  service:
+    name: facial-recognition
+    type: LoadBalancer
+    externalPort: 80
+    internalPort: 80
   webServerIP: 104.214.37.183
   webServerPort: 80
 
@@ -25,4 +27,3 @@ ingress:
     #   hosts:
     #     - chart-example.local
 resources: {}
-
