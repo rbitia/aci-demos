@@ -6,7 +6,7 @@ imageRecognizer:
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
   replicas: 1
   inClusterReplicas: 2
-  webServerIP: 104.214.37.183
+  webServerIP: 13.90.143.52 
   webServerPort: 80
 
 

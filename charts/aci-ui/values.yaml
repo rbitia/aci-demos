@@ -8,7 +8,7 @@ ui:
     type: LoadBalancer
     externalPort: 80
     internalPort: 80
-  webServerIP: 13.65.85.219
+  webServerIP: 13.90.143.52 
   webServerPort: 80
 
 
