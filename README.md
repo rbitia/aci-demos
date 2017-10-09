@@ -38,7 +38,7 @@ clone this repo
 $ git clone https://github.com/rbitia/aci-demos.git
 ```
 
-See the dashboard to see your utilization run up on the cluster
+See the dashboard - check throughout the demo 
 ```
 $ kubectl proxy
 ```
