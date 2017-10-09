@@ -67,8 +67,8 @@ Edit  aci-demos/charts/aci-ui/values.yaml with the webServerIP address under ui
 
 Install the aci-ui chart
 ```
-$ helm inspect values charts/webserver > customWeb.yaml
-$ helm install -n webserver -f customWeb.yaml charts/webserver
+$ helm inspect values charts/aci-ui > customUI.yaml
+$ helm install -n aci-ui -f customUI.yaml charts/aci-ui
 ```
 
 
