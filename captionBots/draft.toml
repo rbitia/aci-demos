@@ -1,0 +1,7 @@
+[environments]
+  [environments.development]
+    name = "nordic-mule"
+    namespace = "default"
+    wait = false
+    watch = false
+    watch_delay = 2
