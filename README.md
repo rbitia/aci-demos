@@ -124,6 +124,11 @@ $ helm inspect values charts/aci-demo > custom.yaml
 $ helm install -n aci-demo -f custom.yaml charts/aci-demo
 ```
 
+To see what's going on browse to the aci-ui ip address and continue to refresh the pg http://<aciUI-ip>/
+To reset the demo browse to the webserver ip http:/<webserver-ip>/resetDb
+
+feel free to tap my endpoints - if they are down I'm doing some work 
+
 
 To clean up
 ```
