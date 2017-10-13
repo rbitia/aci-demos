@@ -98,23 +98,19 @@ $ helm del --purge aci-demo
 ```
 
 Deploy the ACI connector :
-Use the same rg as ACS
-grab your sub id
-```
-$ az account list -o table
-$ az ad sp create-for-rbac --role=Contributor --scopes /subscriptions/<subscriptionId>/
-```
+
 clone the aci-connector repo
 ```
 $ git clone https://github.com/Azure/aci-connector-k8s.git
+$ cd aci-connector-k8s/examples
 ```
 
-edit your yaml file from within the aci-connector folder ( you could use helm too)
+run this script from the examples folder which auto makes your sp and edits the examples/aci-connector.yaml file
 ```
-$ vim examples/aci-connector.yaml
+$ python3 generateManifest.py --resource-group <resource group> --location <location> --subscription-id <subscription id>
 ```
 
-deploy the aci-connector ( you could use helm too)
+deploy the aci-connector
 ```
 $ kubectl create -f examples/aci-connector.yaml
 ```
