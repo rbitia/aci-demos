@@ -1,8 +1,6 @@
 #!flask/bin/python
-from flask import render_template
-from flask import Flask
-from flask import request
-
+from flask import Flask, render_template, request, Response
+from flask_cors import CORS
 import json
 import sqlite3
 import requests
@@ -15,7 +13,6 @@ from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
     if not os.path.isfile('jobs.db'):
@@ -24,7 +21,6 @@ def index():
     conn = sqlite3.connect('jobs.db')
 
     row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
-
 
     if(row == None ):
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -51,7 +47,7 @@ def index():
 
     conn.close()
 
-    return json.dumps({'filename': filename,'processed': 0})
+    return Response(json.dumps({'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
 
 @app.route('/processed')
 def processed():
@@ -67,16 +63,23 @@ def processed():
     conn.commit()
 
     conn.close()
-    return "all good"
+    return 200
 
 @app.route('/resetDb')
 def resetDb():
+    
+    if not os.path.isfile('jobs.db'):
+        return  request.args.get('callback') + "(" +  json.dumps({"success":False}) + ")"
+
     conn = sqlite3.connect('jobs.db')
     conn.execute("UPDATE jobs set detected = NULL, processed = 0;" )
     conn.execute("UPDATE time set started = 0, finished = 0;" )
     conn.commit()
 
-    return "The database has been reset, no worries, hope you ment to do that, theres no going back man"
+    time_data = conn.execute("select * from time where id = 1;").fetchone()
+
+    return json.dumps(time_data)
+    #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
 @app.route('/getProgress')
 def getProgress():
@@ -91,8 +94,10 @@ def getProgress():
     if(time_data[3] == 1):
         current_time = datetime.strptime(time_data[2],'%Y-%m-%d %H:%M:%S')
 
-
     total_time = (current_time - start_time).total_seconds()
+
+    if time_data[4] == 0:
+        total_time = 0
 
     pictures = []
 
@@ -110,11 +115,13 @@ def getProgress():
 
     json_data = json.dumps(data)
 
-    return  request.args.get('callback') + "(" +  json_data + ")"
+    callback = request.args.get('callback')
+
+    return callback  + "(" +  json_data + ")"
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=80)
+    app.run(debug=True,host='0.0.0.0')
 
 

@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 
-    jobserver_url = os.getenv('IP_JOB_SERVER', "localhost")
+    jobserver_url = os.getenv('IP_JOB_SERVER', "localhost:80")
     return render_template('index.html', jobserver_url = jobserver_url)
 
 @app.route('/charts3d')
@@ -18,4 +18,4 @@ def chart3d():
     return render_template('charts.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0',port=8000)
+    app.run(debug=True, host='0.0.0.0',port=8080)

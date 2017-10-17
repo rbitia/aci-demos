@@ -126,8 +126,7 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Cost Analysis With ACI</p>
-                                            23
+                                            <button id="reset-btn" type="button" class="btn btn-outline-secondary">Reset Database</button>
                                         </div>
                                     </div>
                                 </div>
@@ -401,59 +400,70 @@
                 $('#all-pics-model').modal('toggle');
             });
 
+            $('#reset-btn').on('click',function(){
+                $.ajax({
+                        type: 'GET',
+                        dataType: "jsonp",
+                        url: "http://{{jobserver_url}}/resetDb",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Headers": "origin, content-type, accept"
+                        },
+                        success: function (fullData, textStatus, jqXHR) {
+                            console.log("Reset the database");
+                        }
+                });
+            })
 
             //Add auto updating code for the numbers
             $(function(){
 
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        dataType: "jsonp",
+                        url: "http://{{jobserver_url}}/getProgress",
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Headers": "origin, content-type, accept"
+                        },
+                        success: function (fullData, textStatus, jqXHR) {
+                            var detected = 1;
+                            var all = 1;
 
-                $.ajax({
-                    type: 'GET',
-                    dataType: "jsonp",
-                    url: "http://{{jobserver_url}}/getProgress",
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Headers": "origin, content-type, accept"
-                    },
-                    success: function (fullData, textStatus, jqXHR) {
-                        var detected = 1;
-                        var all = 1;
+                            total_time = fullData['total_time']
+                            seconds = Math.floor(total_time % 60)
+                            minutes = Math.floor(total_time / 60)
 
+                            data = fullData['pictures']
 
-                        total_time = fullData['total_time']
-                        seconds = Math.floor(total_time % 60)
-                        minutes = Math.floor(total_time / 60)
+                            $("#pic-num").text(data.length)
 
-                        data = fullData['pictures']
+                            $("#total_time").text(minutes + "m " + seconds + "s")
 
-                        console.log(total_time)
+                            for(var i = 0; i < data.length; i++){
+                                if(data[i].detected == 1 && detected < 13){
 
-                        $("#pic-num").text(data.length)
-                        $("#total_time").text(minutes + "m " + total_time + "s")
+                                    $("#d-" + detected).attr('src',"static/Pics/" + data[i].filename);
+                                    detected++;
 
+                                }
+                                else if(all < 13){
 
-                        for(var i = 0; i < data.length; i++){
-                            if(data[i].detected == 1 && detected < 13){
-
-                                $("#d-" + detected).attr('src',"static/Pics/" + data[i].filename);
-                                detected++;
-
+                                    $("#all-" + all).attr('src',"static/Pics/" + data[i].filename);
+                                    all++;
+                                }
+                                else{
+                                    break;
+                                }
                             }
-                            else if(all < 13){
-
-                                $("#all-" + all).attr('src',"static/Pics/" + data[i].filename);
-                                all++;
-                            }
-                            else{
-                                break;
-                            }
+                        },
+                        error: function (responseData, textStatus, errorThrown) {
+                            console.log(errorThrown)
+                            console.log('POST failed.');
                         }
-                    },
-                    error: function (responseData, textStatus, errorThrown) {
-                        console.log(errorThrown)
-                        console.log('POST failed.');
-                    }
-                });
-
+                    });
+                },1000);
             });
 
 
