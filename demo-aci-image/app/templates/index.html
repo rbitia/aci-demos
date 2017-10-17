@@ -405,7 +405,8 @@
             //Add auto updating code for the numbers
             $(function(){
 
-
+               while(true)
+							 {
                 $.ajax({
                     type: 'GET',
                     dataType: "jsonp",
@@ -420,8 +421,8 @@
 
 
                         total_time = fullData['total_time']
-                        seconds = Math.floor(total_time % 60)
-                        minutes = Math.floor(total_time / 60)
+                        seconds = total_time //Math.floor(total_time % 60)
+                        minutes = 0//Math.floor(total_time / 60)
 
                         data = fullData['pictures']
 
@@ -429,7 +430,6 @@
 
                         $("#pic-num").text(data.length)
                         $("#total_time").text(minutes + "m " + total_time + "s")
-
 
                         for(var i = 0; i < data.length; i++){
                             if(data[i].detected == 1 && detected < 13){
@@ -453,7 +453,8 @@
                         console.log('POST failed.');
                     }
                 });
-
+								sleep(2)
+							}
             });
 
 
