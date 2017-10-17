@@ -2,6 +2,7 @@
 from flask import render_template
 from flask import Flask
 from flask import request
+from jobqueue import JobQueue
 
 import json
 import sqlite3
@@ -15,12 +16,19 @@ from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
+@app.route('/redis')
+def redis():
+    
+    q = JobQueue("test")
+    q.put("hello, world")
+
+    return "hello"
 
 @app.route('/')
 def index():
     if not os.path.isfile('jobs.db'):
         exit("There must be a database, try running dbCreator")
-    
+
     conn = sqlite3.connect('jobs.db')
 
     row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
@@ -46,12 +54,12 @@ def index():
     id = row[0]
     filename = row[1]
 
-    conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";" )
+    conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";")
     conn.commit()
 
     conn.close()
 
-    return json.dumps({'filename': filename,'processed': 0})
+    return json.dumps({'filename': filename, 'processed': 0})
 
 @app.route('/processed')
 def processed():
@@ -60,9 +68,9 @@ def processed():
     detected = request.args.get('detected')
 
     if(detected == "true"):
-        conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
+        conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";")
     else:
-        conn.execute("UPDATE jobs set detected = 0 where filename = \"" + filename + "\";" )
+        conn.execute("UPDATE jobs set detected = 0 where filename = \"" + filename + "\";")
 
     conn.commit()
 
@@ -91,7 +99,6 @@ def getProgress():
     if(time_data[3] == 1):
         current_time = datetime.strptime(time_data[2],'%Y-%m-%d %H:%M:%S')
 
-
     total_time = (current_time - start_time).total_seconds()
 
     pictures = []
@@ -111,7 +118,6 @@ def getProgress():
     json_data = json.dumps(data)
 
     return  request.args.get('callback') + "(" +  json_data + ")"
-
 
 
 if __name__ == '__main__':

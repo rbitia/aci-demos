@@ -1,0 +1,143 @@
+*** Starting uWSGI 2.0.15 (64bit) on [Mon Oct 16 22:45:46 2017] ***
+compiled with version: 4.8.4 on 16 October 2017 22:34:17
+os: Linux-4.9.49-moby #1 SMP Wed Sep 27 00:36:29 UTC 2017
+nodename: 691161a1e17a
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /var/www/app
+*** WARNING: you are running uWSGI without its master process manager ***
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /var/www/app/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Oct 26 2016, 20:33:43)  [GCC 4.8.4]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x160a270
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72760 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x160a270 pid: 8 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 8, cores: 1)
+[2017-10-16 22:45:59,314] ERROR in app: Exception on /redis [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "./run.py", line 23, in redis
+    q.put("hello, world")
+  File "./jobqueue.py", line 20, in put
+    self.__db.rpush(self.key, item)
+  File "/usr/local/lib/python2.7/dist-packages/redis/client.py", line 1388, in rpush
+    return self.execute_command('RPUSH', name, *values)
+  File "/usr/local/lib/python2.7/dist-packages/redis/client.py", line 673, in execute_command
+    connection.send_command(*args)
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 610, in send_command
+    self.send_packed_command(self.pack_command(*args))
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 585, in send_packed_command
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 489, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 99 connecting to localhost:6379. Cannot assign requested address.
+[pid: 8|app: 0|req: 1/1] 172.18.0.1 () {40 vars in 739 bytes} [Mon Oct 16 22:45:59 2017] GET /redis => generated 291 bytes in 4 msecs (HTTP/1.1 500) 2 headers in 84 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.15 (64bit) on [Mon Oct 16 22:53:22 2017] ***
+compiled with version: 4.8.4 on 16 October 2017 22:34:17
+os: Linux-4.9.49-moby #1 SMP Wed Sep 27 00:36:29 UTC 2017
+nodename: 691161a1e17a
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /var/www/app
+*** WARNING: you are running uWSGI without its master process manager ***
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /var/www/app/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Oct 26 2016, 20:33:43)  [GCC 4.8.4]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1ce0270
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72760 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x1ce0270 pid: 10 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 10, cores: 1)
+*** Starting uWSGI 2.0.15 (64bit) on [Mon Oct 16 22:57:58 2017] ***
+compiled with version: 4.8.4 on 16 October 2017 22:34:17
+os: Linux-4.9.49-moby #1 SMP Wed Sep 27 00:36:29 UTC 2017
+nodename: e8b719fb2cf1
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /var/www/app
+*** WARNING: you are running uWSGI without its master process manager ***
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /var/www/app/uwsgi.sock fd 3
+Python version: 2.7.6 (default, Oct 26 2016, 20:33:43)  [GCC 4.8.4]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x2252270
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72760 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x2252270 pid: 8 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 8, cores: 1)
+[2017-10-16 22:58:12,661] ERROR in app: Exception on /redis [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "./run.py", line 23, in redis
+    q.put("hello, world")
+  File "./jobqueue.py", line 20, in put
+    self.__db.rpush(self.key, item)
+  File "/usr/local/lib/python2.7/dist-packages/redis/client.py", line 1388, in rpush
+    return self.execute_command('RPUSH', name, *values)
+  File "/usr/local/lib/python2.7/dist-packages/redis/client.py", line 673, in execute_command
+    connection.send_command(*args)
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 610, in send_command
+    self.send_packed_command(self.pack_command(*args))
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 585, in send_packed_command
+    self.connect()
+  File "/usr/local/lib/python2.7/dist-packages/redis/connection.py", line 489, in connect
+    raise ConnectionError(self._error_message(e))
+ConnectionError: Error 99 connecting to localhost:6379. Cannot assign requested address.
+[pid: 8|app: 0|req: 1/1] 172.18.0.1 () {40 vars in 739 bytes} [Mon Oct 16 22:58:12 2017] GET /redis => generated 291 bytes in 3 msecs (HTTP/1.1 500) 2 headers in 84 bytes (1 switches on core 0)
