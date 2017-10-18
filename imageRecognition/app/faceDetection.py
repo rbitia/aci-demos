@@ -17,11 +17,9 @@ import time
 
 from dbAzureBlob import DbAzureBlob
 
-sys.stderr.write('start here \n')
 start_time = time.time()                        # Start the timer
 
 def detect(img, cascade):                       # Figure out if the image has a face
-    sys.stderr.write('in detect')
     rects = cascade.detectMultiScale(img, scaleFactor=1.3,
     minNeighbors=4, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:                         # No face found
@@ -54,17 +52,17 @@ def getFilename(url):
 
     return r.json()
 
-    #grab the filename request
+#grab the filename request
 def sendRes(url, filename, detected):
     r = requests.get(url + "/processed", params={
             "detected":detected,
             "filename":filename
         })
 
-
-
 #make a request
 jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
+print("JOB SERVER URL: ", jobserver_url)
+
 
 counter = 0
 
@@ -74,6 +72,7 @@ while True:
     response = getFilename(jobserver_url)
 
     if(response == False):
+        print("Failed to get response from jobserver")
         time.sleep(1)
         continue
 
@@ -87,7 +86,7 @@ while True:
         filename = filename[2:]
 
     dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)
-
+    print("Got image: ",filename," from blob")
     img = cv2.imread("/app/Pics/" + filename)
 
     cascade = cv2.CascadeClassifier('/app/haarcascade_frontalface_default.xml')

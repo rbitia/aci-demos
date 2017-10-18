@@ -20,6 +20,12 @@ class DbAzureBlob:
     def getImageFromAzureBlob(self,filename_src, filename_dest):
         self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
 
+    def getAllImagesFromAzureBlob(self,container,dest_folder):
+        generator = self.block_blob_service.list_blobs('pictures')
+
+        for blob in generator:
+            self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+
     def doubleDatabase(self):
         conn = sqlite3.connect('jobs.db')
         cursor = conn.execute("SELECT * FROM jobs;")

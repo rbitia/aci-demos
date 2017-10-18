@@ -16,7 +16,15 @@ class DbAzureBlob:
 
         self.block_blob_service = BlockBlobService(account_name= AZURE_BLOB_ACCOUNT, account_key=AZURE_BLOB_KEY)
 
-    #block_blob_service.get_blob_to_path('pictures', 'UNADJUSTEDNONRAW_thumb_ff.jpg', 'UNADJUSTEDNONRAW_thumb_ff.jpg')
+
+    def getImageFromAzureBlob(self,filename_src, filename_dest):
+        self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+
+    def getAllImagesFromAzureBlob(self,container,dest_folder):
+        generator = self.block_blob_service.list_blobs('pictures')
+
+        for blob in generator:
+            self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
 
     def doubleDatabase(self):
         conn = sqlite3.connect('jobs.db')
