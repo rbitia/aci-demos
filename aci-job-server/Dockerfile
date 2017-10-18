@@ -4,8 +4,10 @@ MAINTAINER Samuel Kreter
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
-    python-pip python-dev uwsgi-plugin-python \
-    nginx supervisor sqlite3 libsqlite3-dev
+    python3-pip python3-dev uwsgi-plugin-python \
+    nginx supervisor sqlite3 libsqlite3-dev \
+    build-essential libssl-dev libffi-dev
+
 COPY nginx/flask.conf /etc/nginx/sites-available/
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY app /var/www/app
@@ -18,7 +20,7 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
     && chown -R www-data:www-data /var/log
 
 
-RUN pip install -r /var/www/app/requirements.txt
+RUN pip3 install -r /var/www/app/requirements.txt
 
 
 CMD ["/usr/bin/supervisord"]

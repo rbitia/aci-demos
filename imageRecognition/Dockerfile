@@ -7,8 +7,8 @@ RUN apt-get update \
 	&& apt-get install -y unzip wget build-essential \
 		cmake git pkg-config libswscale-dev \
 		python3-dev python3-numpy python3-pip \
-		libtbb2 libtbb-dev libjpeg-dev \
-		libpng-dev libtiff-dev libjasper-dev
+		libtbb2 libtbb-dev libjpeg-dev libffi-dev \
+		libpng-dev libtiff-dev libjasper-dev libssl-dev
 
 RUN PYTHONPATH=/usr/lib/python3.0
 RUN export $PYTHONPATH
@@ -28,10 +28,8 @@ RUN cd \
 
 COPY app/ /app
 
-RUN cd /app \
-	&& tar xvzf images.tar.gz
+WORKDIR /app
 
-RUN cd /app \
-	&& pip3 install -r ./requirements.txt
+RUN pip3 install -r ./requirements.txt
 
-CMD ["python3", "app/faceDetection.py"]
+CMD ["python3", "faceDetection.py"]

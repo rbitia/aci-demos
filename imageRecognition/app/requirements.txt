@@ -1,3 +1,4 @@
 pillow
 image
+cryptography==2.0.3 
 azure-storage-blob

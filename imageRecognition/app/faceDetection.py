@@ -15,6 +15,8 @@ import time
 import requests
 import time
 
+from dbAzureBlob import DbAzureBlob
+
 sys.stderr.write('start here \n')
 start_time = time.time()                        # Start the timer
 
@@ -66,8 +68,9 @@ jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
 
 counter = 0
 
+dbHelper = DbAzureBlob()
+
 while True:
-    sys.stderr.write('while true')
     response = getFilename(jobserver_url)
 
     if(response == False):
@@ -75,27 +78,22 @@ while True:
         continue
 
     if(response['processed'] == 1):
-        sys.stderr.write('\n processed response')
-        break
+        time.sleep(1)
 
-    sys.stderr.write('hello world')
     filename = response['filename']
-    sys.stderr.write(filename)
     realFilename = filename
-    sys.stderr.write('after files')
-
 
     if(filename[:2] == "._"):
-        sys.stderr.write('\n filename 2')
         filename = filename[2:]
 
-    sys.stderr.write('\nmiddles')
-    img = cv2.imread("./app/Pics/" + filename)
-    sys.stderr.write('\napp pics')
-    cascade = cv2.CascadeClassifier('./app/haarcascade_frontalface_default.xml')
-    sys.stderr.write('\nclass')
+    dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)
+
+    img = cv2.imread("/app/Pics/" + filename)
+
+    cascade = cv2.CascadeClassifier('/app/haarcascade_frontalface_default.xml')
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    sys.stderr.write('picss')
+
     gray = cv2.equalizeHist(gray)
     rects = detect(gray, cascade)
 

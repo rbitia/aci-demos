@@ -1,0 +1,89 @@
+*** Starting uWSGI 2.0.15 (64bit) on [Wed Oct 18 19:13:59 2017] ***
+compiled with version: 4.8.4 on 18 October 2017 17:57:04
+os: Linux-4.9.49-moby #1 SMP Wed Sep 27 00:36:29 UTC 2017
+nodename: 95229a9f6afb
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /var/www/app
+*** WARNING: you are running uWSGI without its master process manager ***
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /var/www/app/uwsgi.sock fd 3
+Python version: 3.4.3 (default, Nov 17 2016, 01:12:14)  [GCC 4.8.4]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xad7cd0
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72768 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0xad7cd0 pid: 9 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 9, cores: 1)
+[2017-10-18 19:14:12,797] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.4/dist-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "./run.py", line 21, in index
+    dbHelper = DbAzureBlob()
+  File "./dbAzureBlob.py", line 15, in __init__
+    raise EnvironmentError("Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.")
+OSError: Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.
+[pid: 9|app: 0|req: 1/1] 172.17.0.1 () {40 vars in 729 bytes} [Wed Oct 18 19:14:12 2017] GET / => generated 291 bytes in 2 msecs (HTTP/1.1 500) 2 headers in 84 bytes (1 switches on core 0)
+[2017-10-18 19:14:28,214] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.4/dist-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "./run.py", line 21, in index
+    dbHelper = DbAzureBlob()
+  File "./dbAzureBlob.py", line 15, in __init__
+    raise EnvironmentError("Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.")
+OSError: Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.
+[pid: 9|app: 0|req: 2/2] 172.17.0.1 () {40 vars in 729 bytes} [Wed Oct 18 19:14:28 2017] GET / => generated 291 bytes in 1 msecs (HTTP/1.1 500) 2 headers in 84 bytes (1 switches on core 0)
+[2017-10-18 19:14:57,131] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.4/dist-packages/flask/_compat.py", line 33, in reraise
+    raise value
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.4/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "./run.py", line 21, in index
+    dbHelper = DbAzureBlob()
+  File "./dbAzureBlob.py", line 15, in __init__
+    raise EnvironmentError("Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.")
+OSError: Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.
+[pid: 9|app: 0|req: 3/3] 172.17.0.1 () {40 vars in 729 bytes} [Wed Oct 18 19:14:57 2017] GET / => generated 291 bytes in 1 msecs (HTTP/1.1 500) 2 headers in 84 bytes (1 switches on core 0)
