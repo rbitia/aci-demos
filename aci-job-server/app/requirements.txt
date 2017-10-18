@@ -2,3 +2,4 @@ uwsgi
 flask
 jsonify
 flask-cors
+azure-storage-blob
