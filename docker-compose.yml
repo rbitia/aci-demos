@@ -5,7 +5,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - 'C:\Users\sakreter\test\aci-demos\aci-job-server\logs\:/var/log/uwsgi/app/'
+      - './aci-job-server/logs/:/var/log/uwsgi/app/'
     env_file:
       - ./.env
   aci-worker:
@@ -16,8 +16,6 @@ services:
       - '8000:80'
     depends_on:
       - jobserver
-    volumes:
-      - 'C:\Users\sakreter\test\aci-demos\imageRecognition\logs\:/var/log/uwsgi/app/'
     env_file:
       - ./.env
   aci-ui:
@@ -29,6 +27,6 @@ services:
     depends_on:
       - jobserver
     volumes:
-      - 'C:\Users\sakreter\test\aci-demos\demo-aci-image\logs\:/var/log/uwsgi/app/'
+      - './demo-aci-image/logs/:/var/log/uwsgi/app/'
     env_file:
       - ./.env
