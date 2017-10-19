@@ -1,3 +1,7 @@
+#By Sam Kreter
+#For use by Microsoft and other parties to demo
+#Azure Container Service, Azure Container Instances
+#and the experimental ACI-connector
 import os
 from azure.storage.blob import BlockBlobService
 import sqlite3
@@ -9,12 +13,11 @@ class DbAzureBlob:
     
     def __init__(self):
         AZURE_BLOB_ACCOUNT = os.environ.get('AZURE_BLOB_ACCOUNT')
-        AZURE_BLOB_KEY = os.environ.get('AZURE_BLOB_KEY')
 
-        if not AZURE_BLOB_ACCOUNT or not AZURE_BLOB_KEY:
-            raise EnvironmentError("Must have env variables AZURE_BLOB_ACCOUNT and AZURE_BLOB_KEY set for this to work.")
+        if not AZURE_BLOB_ACCOUNT:
+            raise EnvironmentError("Must have env variables AZURE_BLOB_ACCOUNT set for this to work.")
 
-        self.block_blob_service = BlockBlobService(account_name= AZURE_BLOB_ACCOUNT, account_key=AZURE_BLOB_KEY)
+        self.block_blob_service = BlockBlobService(account_name= AZURE_BLOB_ACCOUNT)
 
 
     def getImageFromAzureBlob(self,filename_src, filename_dest):
