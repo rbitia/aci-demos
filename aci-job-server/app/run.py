@@ -28,14 +28,8 @@ def index():
     row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
 
     if(row == None ):
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("UPDATE time set finished = 1, finish_time = \""+ current_time +"\" where id = 1;")
-        conn.commit()
-    
-        return json.dumps({
-            'filename':"NULL",
-            'processed':1,
-        })
+        dbHelper.doubleDatabase()
+        row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
 
     cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
 
@@ -77,7 +71,12 @@ def resetDb():
     ''' Use to delete the cache db and start the process again'''
     os.remove(DATABASE_NAME)
 
-    return request.args.get('callback') + "(" +  json.dumps({"success":True,"status_code":200}) + ")"
+    response = json.dumps({"success":True,"status_code":200})
+    callback = request.args.get('callback')
+    if callback != None:
+        return request.args.get('callback') + "(" + response + ")"
+    else:
+        return response
 
 
 @app.route('/reuseDb')
