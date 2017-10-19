@@ -22,7 +22,7 @@ spec:
           - name: IP_JOB_SERVER
             value: {{ .Values.imageRecognizer.webServerIP }}:{{ .Values.imageRecognizer.webServerPort }}
           - name: AZURE_BLOB_ACCOUNT
-            value: acidemopictures
+            value: acidemopicturesred
       dnsPolicy: ClusterFirst
       # Tolerate the ACI taint to get the scheduler to schedule it.
       nodeName: aci-connector

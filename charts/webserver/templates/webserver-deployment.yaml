@@ -19,6 +19,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.webserver.image }}"
           imagePullPolicy: {{ .Values.webserver.pullPolicy }}
+          env:
+          - name: AZURE_BLOB_ACCOUNT
+            value: acidemopictures
           ports:
             - containerPort: {{ .Values.webserver.service.internalPort }}
           livenessProbe:

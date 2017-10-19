@@ -1,12 +1,12 @@
 
 # Settings for the facial image recognizer
 imageRecognizer:
-  image: "rbitia/aci-demo:latest"
+  image: "rbitia/aci-demo:test"
   # I cut this from 100 because that was taking a long time to spin up and delete.
   # You can override this on the CLI with `--set imageRecognizer.replicas=100`
   replicas: 1
   inClusterReplicas: 2
-  webServerIP: 13.90.143.52 
+  webServerIP: 52.183.25.30
   webServerPort: 80
 
 

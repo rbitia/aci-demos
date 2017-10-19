@@ -22,6 +22,8 @@ spec:
           env:
           - name: IP_JOB_SERVER
             value: {{ .Values.ui.webServerIP }}:{{ .Values.ui.webServerPort }}
+          - name: AZURE_BLOB_ACCOUNT
+            value: acidemopictures
           ports:
             - containerPort: {{ .Values.ui.service.internalPort }}
           livenessProbe:

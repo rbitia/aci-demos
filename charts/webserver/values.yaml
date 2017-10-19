@@ -1,6 +1,6 @@
 webserver:
   replicaCount: 1
-  image: "rbitia/aci-webserver:latest"
+  image: "rbitia/aci-webserver:test"
   service:
     name: web-server
     type: LoadBalancer
