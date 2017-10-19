@@ -1,0 +1,32 @@
+version: '2'
+services:
+  jobserver:
+    build: ./aci-job-server/
+    ports:
+      - '80:80'
+    volumes:
+      - './aci-job-server/logs/:/var/log/uwsgi/app/'
+    env_file:
+      - ./.env
+  aci-worker:
+    build: ./imageRecognition/
+    links:
+      - jobserver
+    ports:
+      - '8000:80'
+    depends_on:
+      - jobserver
+    env_file:
+      - ./.env
+  aci-ui:
+    build: ./demo-aci-image/
+    links:
+      - jobserver
+    ports:
+      - "8080:80"
+    depends_on:
+      - jobserver
+    volumes:
+      - './demo-aci-image/logs/:/var/log/uwsgi/app/'
+    env_file:
+      - ./.env

@@ -6,19 +6,24 @@ import sqlite3
 import requests
 from datetime import datetime
 import os
-
+from dbAzureBlob import DbAzureBlob
 
 import logging
 from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
+DATABASE_NAME = 'jobs.db'
+
+
 @app.route('/')
 def index():
-    if not os.path.isfile('jobs.db'):
-        exit("There must be a database, try running dbCreator")
+    dbHelper = DbAzureBlob()
+
+    if not os.path.isfile(DATABASE_NAME):
+        dbHelper.setupDatabase()
     
-    conn = sqlite3.connect('jobs.db')
+    conn = sqlite3.connect(DATABASE_NAME)
 
     row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
 
@@ -26,7 +31,7 @@ def index():
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("UPDATE time set finished = 1, finish_time = \""+ current_time +"\" where id = 1;")
         conn.commit()
-
+    
         return json.dumps({
             'filename':"NULL",
             'processed':1,
@@ -49,9 +54,10 @@ def index():
 
     return Response(json.dumps({'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
 
+
 @app.route('/processed')
 def processed():
-    conn = sqlite3.connect('jobs.db')
+    conn = sqlite3.connect(DATABASE_NAME)
     filename = request.args.get('filename')
     detected = request.args.get('detected')
 
@@ -65,13 +71,22 @@ def processed():
     conn.close()
     return 200
 
+
 @app.route('/resetDb')
 def resetDb():
+    ''' Use to delete the cache db and start the process again'''
+    os.remove(DATABASE_NAME)
+
+    return request.args.get('callback') + "(" +  json.dumps({"success":True,"status_code":200}) + ")"
+
+
+@app.route('/reuseDb')
+def reuseDb():
     
-    if not os.path.isfile('jobs.db'):
+    if not os.path.isfile(DATABASE_NAME):
         return  request.args.get('callback') + "(" +  json.dumps({"success":False}) + ")"
 
-    conn = sqlite3.connect('jobs.db')
+    conn = sqlite3.connect(DATABASE_NAME)
     conn.execute("UPDATE jobs set detected = NULL, processed = 0;" )
     conn.execute("UPDATE time set started = 0, finished = 0;" )
     conn.commit()
@@ -85,7 +100,7 @@ def resetDb():
 def getProgress():
     current_time = datetime.now()
 
-    conn = sqlite3.connect('jobs.db')
+    conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;")
     time_data = conn.execute("SELECT * FROM time WHERE id = 1;").fetchone()
 
@@ -118,7 +133,6 @@ def getProgress():
     callback = request.args.get('callback')
 
     return callback  + "(" +  json_data + ")"
-
 
 
 if __name__ == '__main__':
