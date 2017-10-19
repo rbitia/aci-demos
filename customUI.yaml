@@ -1,14 +1,14 @@
 # Settings for the UI
 ui:
   replicaCount: 1
-  image: "rbitia/aci-ui:latest"
+  image: "rbitia/aci-ui:test"
   pullPolicy: Always
   service:
     name: facial-recognition
     type: LoadBalancer
     externalPort: 80
     internalPort: 80
-  webServerIP: 13.90.143.52 
+  webServerIP: 52.247.202.12
   webServerPort: 80
 
 

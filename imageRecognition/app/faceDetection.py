@@ -15,11 +15,11 @@ import time
 import requests
 import time
 
-from dbAzureBlob import DbAzureBlob
-
+sys.stderr.write('start here \n')
 start_time = time.time()                        # Start the timer
 
 def detect(img, cascade):                       # Figure out if the image has a face
+    sys.stderr.write('in detect')
     rects = cascade.detectMultiScale(img, scaleFactor=1.3,
     minNeighbors=4, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:                         # No face found
@@ -52,47 +52,50 @@ def getFilename(url):
 
     return r.json()
 
-#grab the filename request
+    #grab the filename request
 def sendRes(url, filename, detected):
     r = requests.get(url + "/processed", params={
             "detected":detected,
             "filename":filename
         })
 
+
+
 #make a request
 jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
-print("JOB SERVER URL: ", jobserver_url)
-
 
 counter = 0
 
-dbHelper = DbAzureBlob()
-
 while True:
+    sys.stderr.write('while true')
     response = getFilename(jobserver_url)
 
     if(response == False):
-        print("Failed to get response from jobserver")
         time.sleep(1)
         continue
 
     if(response['processed'] == 1):
-        time.sleep(1)
+        sys.stderr.write('\n processed response')
+        break
 
+    sys.stderr.write('hello world')
     filename = response['filename']
+    sys.stderr.write(filename)
     realFilename = filename
+    sys.stderr.write('after files')
+
 
     if(filename[:2] == "._"):
+        sys.stderr.write('\n filename 2')
         filename = filename[2:]
 
-    dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)
-    print("Got image: ",filename," from blob")
-    img = cv2.imread("/app/Pics/" + filename)
-
-    cascade = cv2.CascadeClassifier('/app/haarcascade_frontalface_default.xml')
-
+    sys.stderr.write('\nmiddles')
+    img = cv2.imread("./app/Pics/" + filename)
+    sys.stderr.write('\napp pics')
+    cascade = cv2.CascadeClassifier('./app/haarcascade_frontalface_default.xml')
+    sys.stderr.write('\nclass')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
+    sys.stderr.write('picss')
     gray = cv2.equalizeHist(gray)
     rects = detect(gray, cascade)
 
