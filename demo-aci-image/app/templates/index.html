@@ -1,3 +1,7 @@
+<!-- By Sam Kreter
+For use by Microsoft and other parties to demo
+Azure Container Service, Azure Container Instances
+and the experimental ACI-connector -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -448,13 +452,13 @@
                             for(var i = 0; i < data.length; i++){
                                 if(data[i].detected == 1 && detected < 13){
 
-                                    $("#d-" + detected).attr('src',"static/Pics/" + data[i].filename);
+                                    $("#d-" + detected).attr('src',"https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
                                     detected++;
 
                                 }
                                 else if(all < 13){
 
-                                    $("#all-" + all).attr('src',"static/Pics/" + data[i].filename);
+                                    $("#all-" + all).attr('src',"https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
                                     all++;
                                 }
                                 else{

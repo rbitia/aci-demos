@@ -1,4 +1,9 @@
 #!flask/bin/python
+
+#By Sam Kreter
+#For use by Microsoft and other parties to demo
+#Azure Container Service, Azure Container Instances
+#and the experimental ACI-connector
 from flask import Flask, render_template, request, Response
 from flask_cors import CORS
 import json
