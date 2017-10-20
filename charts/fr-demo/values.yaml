@@ -16,7 +16,7 @@ imageRecognizer:
      memory: 128Mi
   azureBlob: 
     storageAccount: acidemopictures
-    key: <redacted>
+    key: Tk23/kL9aC1FVUk0ysYlsN0mmsnmjXzdPM3zPlRWC1VHZetQNrcPgXxB4sF9/XAp9vw4bNkZ9LePJ3jGdk2cWA==
 
 # Settings for the Facial Recognizer UI
 frontend:
