@@ -1,0 +1,94 @@
+# Settings for the facial image recognizer
+imageRecognizer:
+  replicaCount:
+    pods: 2
+    aci: 5
+  image:
+    repository: gabrtv/fr-ir
+    tag: latest
+    pullPolicy: Always
+  resources:
+    limits:
+     cpu: 50m
+     memory: 128Mi
+    requests:
+     cpu: 50m
+     memory: 128Mi
+  azureBlob: 
+    storageAccount: acidemopictures
+    key: <redacted>
+
+# Settings for the Facial Recognizer UI
+frontend:
+  replicaCount: 1
+  image:
+    repository: gabrtv/fr-frontend
+    tag: latest
+    pullPolicy: Always
+  service:
+    name: frontend
+    type: ClusterIP
+    externalPort: 80
+    internalPort: 80
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - fr.gabrtv.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    tls:
+      # Secrets must be manually created in the namespace.
+      - secretName: fr-gabrtv-io
+        hosts:
+          - fr.gabrtv.io
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    #limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+
+# Settings for Facial Recognizer Backend
+backend:
+  replicaCount: 1
+  image:
+    repository: rbitia/aci-webserver
+    tag: latest
+    pullPolicy: Always
+  service:
+    name: backend
+    type: ClusterIP
+    externalPort: 80
+    internalPort: 80
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    hosts:
+      - fr-backend.gabrtv.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    tls:
+      # Secrets must be manually created in the namespace.
+      - secretName: fr-backend-gabrtv-io
+        hosts:
+          - fr-backend.gabrtv.io
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi

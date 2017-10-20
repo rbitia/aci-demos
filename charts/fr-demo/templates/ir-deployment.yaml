@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "fullname" . }}-ir
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.imageRecognizer.replicaCount.pods }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "fullname" . }}-ir
+    spec:
+      containers:
+        - name: {{ include "fullname" . }}-ir
+          image: "{{ .Values.imageRecognizer.image.repository }}:{{ .Values.imageRecognizer.image.tag }}"
+          imagePullPolicy: "{{ .Values.imageRecognizer.image.pullPolicy }}"
+          env:
+          - name: IP_JOB_SERVER
+            value: "{{ include "fullname" . }}-{{ .Values.backend.service.name }}:{{ .Values.backend.service.externalPort }}"
+          - name: AZURE_BLOB_ACCOUNT
+            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
+          - name: AZURE_BLOB_KEY
+            value: "{{ .Values.imageRecognizer.azureBlob.key }}"            
+          resources:
+            requests:
+              memory: "{{ .Values.imageRecognizer.resources.requests.memory }}"
+              cpu: "{{ .Values.imageRecognizer.resources.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.imageRecognizer.resources.limits.memory }}"
+              cpu: "{{ .Values.imageRecognizer.resources.limits.cpu }}"
+      dnsPolicy: ClusterFirst
