@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-backend
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}-backend
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: "{{ .Values.backend.image.pullPolicy }}"
+          ports:
+            - containerPort: {{ .Values.backend.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.backend.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.backend.service.internalPort }}
+          resources:
+{{ toYaml .Values.backend.resources | indent 12 }}
+    {{- if .Values.backend.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.backend.nodeSelector | indent 8 }}
+    {{- end }}
