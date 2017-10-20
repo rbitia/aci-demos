@@ -8,7 +8,8 @@ RUN apt-get update \
 		cmake git pkg-config libswscale-dev \
 		python3-dev python3-numpy python3-pip \
 		libtbb2 libtbb-dev libjpeg-dev libffi-dev \
-		libpng-dev libtiff-dev libjasper-dev libssl-dev
+		libpng-dev libtiff-dev libjasper-dev libssl-dev \
+		python-opencv
 
 RUN PYTHONPATH=/usr/lib/python3.0
 RUN export $PYTHONPATH
@@ -24,7 +25,8 @@ RUN cd \
 	&& make -j3 \
 	&& make install \
 	&& cd \
-	&& rm 3.1.0.zip
+	&& rm 3.1.0.zip \
+	&& rm -rf opencv-3.1.0
 
 COPY app/ /app
 
