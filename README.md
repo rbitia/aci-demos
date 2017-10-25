@@ -1,31 +1,28 @@
 # aci-demos
 Demos with ACI
 
-
-The imagesRecognition folder has a Dockerfile to deploy python code that does facial recognition on multiple pictures and counts up the amount of throughput for each node - meant to be used across a kubernetes cluster
-
-The other folder has a Dockerfile to deploy an html UI that has a dashboard of the metrics from the cluster's throughput of the above Dockerfile.
+Description: Run a facial recognition demo across your AKS cluster and use ACI and the ACI Connector to burst into for on-demand compute.
 
 Contact ria.bhatia@microsoft.com if you need help!
 
-
-
-steps to deploy dis demo
+steps to deploy dis demo & talking tips
 
 Part 1
 create resource group
 ```
-$ az group create --name myResourceGroup --location westeurope
+$ az group create --name myResourceGroup --location westus2
 ```
 
-deploy acs kub cluster
+deploy aks kub cluster
 ```
-$ az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --name myK8sCluster --generate-ssh-keys
+$ az aks create --resource-group myResourceGroup --name myK8sCluster --agent-count 1 --generate-ssh-keys
+
 ```
 
 get creds
 ```
-$ az acs kubernetes get-credentials --resource-group=myResourceGroup --name=myK8sCluster
+$ az aks install-cli
+$ az aks kubernetes get-credentials --resource-group=myResourceGroup --name=myK8sCluster
 ```
 
 make sure you're connected
@@ -38,64 +35,40 @@ clone this repo
 $ git clone https://github.com/rbitia/aci-demos.git
 ```
 
-See the dashboard - check throughout the demo 
-```
-$ kubectl proxy
-```
-
-In another cmd promt lets ramp up utilization
 Make sure you have helm installed and initialize this
 ```
 $ export TILLER_NAMESPACE=aci-demo
 $ kubectl create namespace aci-demo
 $ helm init
 ```
-
-Start at the top of the aci-demos directory
-Install the webserver chart
+edit the values.yaml file and replace <your domain> with your own hosted domain
 ```
-$ helm inspect values charts/webserver > customWeb.yaml
-$ helm install -n webserver -f customWeb.yaml charts/webserver
+$ cd aci-demos/charts  
+$ vim values.yaml
 ```
 
-Grab the webserver ip
+install kube-lego w/ helm for certs
+
 ```
-$ kubectl get svc
+helm install stable/kube-lego --name kube-lego --namespace kube-system --set config.LEGO_EMAIL=<your email>,config.LEGO_URL=https://acme-v01.api.letsencrypt.org/directory
 ```
 
-Edit  aci-demos/charts/aci-ui/values.yaml with the webServerIP address under ui
+install ingress controller w/ helm
+ ```
+ helm install stable/nginx-ingress --name ingress --namespace kube-system
+ ```
+ ^set up can be done before you demo
 
-Install the aci-ui chart
-```
-$ helm inspect values charts/aci-ui > customUI.yaml
-$ helm install -n aci-ui -f customUI.yaml charts/aci-ui
-```
+Start at the top of the aci-demos directory and deploy the Facial Recognition application that consists of a frontend, a backend, and a set of image recognizers.
 
+```
+$ helm install charts/fr-demo --name demo
+```
+Checkout the UI that's generated in the output and see the pictures start to get processed
+Right now you first need to reset the demo at fr-backend.<your domain>
+Now checkout the UI which is usually at fr.<your domain>
 
-Deploy the UI and image recognition work across the cluster
-```
-$ helm inspect values charts/aci-demo > custom.yaml
-$ helm install -n aci-demo -f custom.yaml charts/aci-demo
-```
-
-Wait a couple minutes and grab the ui ip and in your browser go to <ui ip>:80
-```
-$ kubectl get svc
-```
-
-
-To clean up unless you want to go to part 2 then skip:
-```
-$ Helm del --purge webserver
-$ Helm del --purge aci-ui
-$ Helm del --purge aci-demo.
-```
-
-Part 2
-Delete the deployment across the cluster
-```
-$ helm del --purge aci-demo
-```
+Super slow because we have a 1 node AKS cluster.
 
 Deploy the ACI connector :
 
@@ -105,35 +78,30 @@ $ git clone https://github.com/Azure/aci-connector-k8s.git
 $ cd aci-connector-k8s/examples
 ```
 
-run this script from the examples folder which auto makes your sp and edits the examples/aci-connector.yaml file
+run this script from the examples folder which auto makes your sp and edits the examples/aci-connector.yaml file & all this set up can be done beforehand
 ```
 $ python3 generateManifest.py --resource-group <resource group> --location <location> --subscription-id <subscription id>
 ```
+Move the .yaml file to your aci-demo folder so you can create the connector from within it
+I suggest moving it to charts/aci-connector/aci-connector.yaml. You can also use a helm chart to create the connector which is also specified within the aci-connector-k8s repo.
 
-deploy the aci-connector
+deploy the aci-connector from the aci-demo folder
 ```
-$ kubectl create -f examples/aci-connector.yaml
-```
-
-
-Change the replicas in aci-demos/charts/aci-demo/values.yaml of the work across aci vs the cluster
-
-Deploy the work across the cluster
-```
-$ helm inspect values charts/aci-demo > custom.yaml
-$ helm install -n aci-demo -f custom.yaml charts/aci-demo
+$ cd ../../aci-demos
+$ kubectl create -f charts/aci-connector/aci-connector.yaml
 ```
 
-To see what's going on browse to the aci-ui ip address and continue to refresh the pg http://<aciUI-ip>/
-To reset the demo browse to the webserver ip http:/<webserver-ip>/resetDb
+The connector has been deployed and with a `kubectl get nodes` you can see that the aci-connector is a new node in your cluster. Now scale up the image recognizer to 10 using the following command
 
-feel free to tap my endpoints - if they are down I'm doing some work 
-
-
-To clean up
 ```
-$ Helm del --purge webserver
-$ Helm del --purge aci-demo
-$ Helm del --purge aci-ui
-$ Kubectl delete deployment aci-connector
+$ kubectl scale deploy demo-fr-ir-aci --replicas 10
 ```
+Though we are using `kubectl`, the ACI Connector is dispatching pods to Azure Container Instances transparently, via the ACI connector node.
+This virtual node has unlimited capacity and a per-second billing model, making it perfect for burst compute scenarios like this one.
+If we wait a minute or so for the ACI containers to warm up, we should see image recognizer throughput increase dramatically.
+
+Check out the dashboard to see throughput it dramatically increase...
+
+Here we can see throughput really beginning to pick up, thanks to burst capacity provided by ACI.
+ 
+This is powerful stuff.  Here we can see AKS and ACI combine to provide the best of “serverless” computing – invisible infrastructure and micro-billing – all managed through the open Kubernetes APIs.  This kind of innovation – the marriage of containers and serverless computing -- is important for the industry, and Microsoft is working hard to make it a reality.

@@ -2,9 +2,9 @@
 imageRecognizer:
   replicaCount:
     pods: 2
-    aci: 5
+    aci: 0
   image:
-    repository: gabrtv/fr-ir
+    repository: rbitia/fr-ir
     tag: latest
     pullPolicy: Always
   resources:
@@ -14,7 +14,7 @@ imageRecognizer:
     requests:
      cpu: 50m
      memory: 128Mi
-  azureBlob: 
+  azureBlob:
     storageAccount: acidemopictures
     key: Tk23/kL9aC1FVUk0ysYlsN0mmsnmjXzdPM3zPlRWC1VHZetQNrcPgXxB4sF9/XAp9vw4bNkZ9LePJ3jGdk2cWA==
 
@@ -22,7 +22,7 @@ imageRecognizer:
 frontend:
   replicaCount: 1
   image:
-    repository: gabrtv/fr-frontend
+    repository: rbitia/fr-frontend
     tag: latest
     pullPolicy: Always
   service:
@@ -34,15 +34,15 @@ frontend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr.gabrtv.io
+      - fr.<your name>.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-gabrtv-io
+      - secretName: fr-<your name>-com
         hosts:
-          - fr.gabrtv.io
+          - fr.<your domain>.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -72,15 +72,15 @@ backend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr-backend.gabrtv.io
+      - fr-backend.<your domain>.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-backend-gabrtv-io
+      - secretName: fr-backend-<your domain>-com
         hosts:
-          - fr-backend.gabrtv.io
+          - fr-backend.<your domain>.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
