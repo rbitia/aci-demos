@@ -21,8 +21,8 @@ $ az aks create --resource-group myResourceGroup --name myK8sCluster --agent-cou
 
 get creds
 ```
-$ az aks install-cli
-$ az aks kubernetes get-credentials --resource-group=myResourceGroup --name=myK8sCluster
+$ az aks install-cli 
+$ az aks get-credentials --resource-group=myResourceGroup --name=myK8sCluster
 ```
 
 make sure you're connected
@@ -41,9 +41,9 @@ $ export TILLER_NAMESPACE=aci-demo
 $ kubectl create namespace aci-demo
 $ helm init
 ```
-edit the values.yaml file and replace <your domain> with your own hosted domain
+edit the values.yaml file and replace <your name> with your own hosted domain
 ```
-$ cd aci-demos/charts  
+$ cd aci-demos/charts/fr-demo/  
 $ vim values.yaml
 ```
 
