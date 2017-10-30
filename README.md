@@ -21,7 +21,6 @@ $ az aks create --resource-group myResourceGroup --name myK8sCluster --agent-cou
 
 get creds
 ```
-$ az aks install-cli 
 $ az aks get-credentials --resource-group=myResourceGroup --name=myK8sCluster
 ```
 
