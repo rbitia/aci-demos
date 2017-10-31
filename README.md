@@ -36,8 +36,6 @@ $ git clone https://github.com/rbitia/aci-demos.git
 
 Make sure you have helm installed and initialize this
 ```
-$ export TILLER_NAMESPACE=aci-demo
-$ kubectl create namespace aci-demo
 $ helm init
 ```
 edit the values.yaml file and replace <your name> with your own hosted domain
@@ -57,6 +55,7 @@ install ingress controller w/ helm
  helm install stable/nginx-ingress --name ingress --namespace kube-system
  ```
  ^set up can be done before you demo
+ Make sure to grab the Public IP of the ingress controller and place it into your dns zone registration record set. 
 
 Start at the top of the aci-demos directory and deploy the Facial Recognition application that consists of a frontend, a backend, and a set of image recognizers.
 
