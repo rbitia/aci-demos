@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azure-sp-client-id
+        - name: AZURE_CLIENT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azure-sp-client-key
+        - name: AZURE_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azure-sp-tenant-id
+        - name: AZURE_SUBSCRIPTION_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: azure-subscription-id
+        - name: ACI_RESOURCE_GROUP
+          value: {{ .Values.env.aciResourceGroup }}
+        - name: ACI_REGION
+          value: {{ default "westus" .Values.env.aciRegion }}
