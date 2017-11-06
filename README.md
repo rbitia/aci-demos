@@ -55,7 +55,7 @@ install ingress controller w/ helm
  helm install stable/nginx-ingress --name ingress --namespace kube-system
  ```
  ^set up can be done before you demo
- Make sure to grab the Public IP of the ingress controller and place it into your dns zone registration record set. 
+ Make sure to grab the Public IP of the ingress controller and place it into your dns zone registration record set.
 
 Start at the top of the aci-demos directory and deploy the Facial Recognition application that consists of a frontend, a backend, and a set of image recognizers.
 
@@ -65,31 +65,33 @@ $ helm install charts/fr-demo --name demo
 Checkout the UI that's generated in the output and see the pictures start to get processed
 Right now you first need to reset the demo at fr-backend.<your domain>
 Now checkout the UI which is usually at fr.<your domain>
-
-Super slow because we have a 1 node AKS cluster.
+The rate will be super slow because we have a 1 node AKS cluster running 2 pods.
 
 Deploy the ACI connector :
+Run this script from the `create-aci-connector` folder. The script auto creates a service principal at the resource group level and will populate a Helm chart for you.
 
-clone the aci-connector repo
 ```
-$ git clone https://github.com/Azure/aci-connector-k8s.git
-$ cd aci-connector-k8s/examples
-```
-
-run this script from the examples folder which auto makes your sp and edits the examples/aci-connector.yaml file & all this set up can be done beforehand
-```
-$ python3 generateManifest.py --resource-group <resource group> --location <location> --subscription-id <subscription id>
-```
-Move the .yaml file to your aci-demo folder so you can create the connector from within it
-I suggest moving it to charts/aci-connector/aci-connector.yaml. You can also use a helm chart to create the connector which is also specified within the aci-connector-k8s repo.
-
-deploy the aci-connector from the aci-demo folder
-```
-$ cd ../../aci-demos
-$ kubectl create -f charts/aci-connector/aci-connector.yaml
+$ cd create-aci-connector
+$ python generateManifest.py --create-group --resource-group myConnectorRG --helm
 ```
 
-The connector has been deployed and with a `kubectl get nodes` you can see that the aci-connector is a new node in your cluster. Now scale up the image recognizer to 10 using the following command
+Output
+
+```
+('Creating Resource Group ', 'myResourceGroup')
+Using defalut location: westus
+Creating Service Principal
+Retrying role assignment creation: 1/36
+Retrying role assignment creation: 2/36
+Retrying role assignment creation: 3/36
+Run the following command to install the ACI connector:
+-----Begin Command----
+helm install --name my-release --set env.azureClientId=b75b5741-b091-4e62-a7bf-000000000000,env.azureClientKey=0f7bf673-5372-4a1c-b5d9-000000000000,env.azureTenantId=72f988bf-86f1-41af-91ab-2000000000000,env.azureSubscriptionId=3762d87c-ddb8-425f-b2fc-000000000000,env.aciResourceGroup=myResourceGroup,env.aciRegion=westus ../charts/aci-connector
+-----End Command----
+```
+Install the ACI Connector from the helm chart specified in the output from the command above.
+
+The connector has been deployed and with a `kubectl get nodes` you can see that the ACI Connector is a new node in your cluster. Now scale up the image recognizer to 10 using the following command
 
 ```
 $ kubectl scale deploy demo-fr-ir-aci --replicas 10
@@ -103,3 +105,18 @@ Check out the dashboard to see throughput it dramatically increase...
 Here we can see throughput really beginning to pick up, thanks to burst capacity provided by ACI.
  
 This is powerful stuff.  Here we can see AKS and ACI combine to provide the best of “serverless” computing – invisible infrastructure and micro-billing – all managed through the open Kubernetes APIs.  This kind of innovation – the marriage of containers and serverless computing -- is important for the industry, and Microsoft is working hard to make it a reality.
+
+
+Once you've done all the set up you just need these commands during the live demo:
+```
+$ helm install charts/fr-demo --name demo
+$ helm install --name aci-connector --set env.azureClientId=b75b5741-b091-4e62-a7bf-000000000000,env.azureClientKey=0f7bf673-5372-4a1c-b5d9-000000000000,env.azureTenantId=72f988bf-86f1-41af-91ab-2000000000000,env.azureSubscriptionId=3762d87c-ddb8-425f-b2fc-000000000000,env.aciResourceGroup=myResourceGroup,env.aciRegion=westus ../charts/aci-connector
+$ kubectl scale deploy demo-fr-ir-aci --replicas 10
+```
+
+
+To clean up:
+```
+$ helm del purge aci-demo
+$ helm del purge aci-connector
+```

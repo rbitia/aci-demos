@@ -1,0 +1,8 @@
+name: aci-connector
+version: 0.1.0
+description: a Helm chart to install aci-connector inside a Kubernetes cluster.
+sources:
+  - https://github.com/Azure/aci-connector-k8s
+maintainers:
+  - name: Yaron Schnedier
+    email: yaronsc@microsoft.com
