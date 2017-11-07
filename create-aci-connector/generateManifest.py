@@ -106,16 +106,12 @@ def main():
                     filename2 = "values.yaml"
                 with open(filename2, 'w') as file:
                     file.write(filedata)
-        app_info = json.loads(
-             subprocess.check_output(
-                "helm install --name aci-connector -f values.yaml",
-                 shell=True
-             ).decode("utf-8")
 
-        #print("Run the following command to install the ACI connector:")
-        #print("-----Begin Command----")
+        print("Run the following command to install the ACI connector:")
+        print("-----Begin Command----")
+        print("helm install --name aci-connector -f values.yaml")
         #print("helm install --name my-release --set env.azureClientId=%s,env.azureClientKey=%s,env.azureTenantId=%s,env.azureSubscriptionId=%s,env.aciResourceGroup=%s,env.aciRegion=%s ../charts/aci-connector" % (app_info['appId'], app_info['password'], app_info['tenant'], subscription_id, resource_group, location))
-        #print("-----End Command----")
+        print("-----End Command----")
     else:    #using a kub yaml deployment to deploy the connector
         app_info = json.loads(
              subprocess.check_output(
