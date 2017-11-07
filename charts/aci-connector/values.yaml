@@ -1,11 +1,11 @@
 image:
-  repository: microsoft/aci-connector-k8s
+  repository: microsoft/aci-connector-k8s:latest
   tag: latest
   pullPolicy: Always
 env:
-  azureClientId: 
-  azureClientKey:
-  azureTenantId:
-  azureSubscriptionId:
-  aciResourceGroup:
-  aciRegion:
+  azureClientId: <CLIENT_ID>
+  azureClientKey: <CLIENT_KEY>
+  azureTenantId: <TENANT_ID>
+  azureSubscriptionId: <SUBSCRIPTION_ID>
+  aciResourceGroup: <RESOURCE_GROUP>
+  aciRegion: westus
