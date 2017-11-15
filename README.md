@@ -117,6 +117,6 @@ $ kubectl scale deploy demo-fr-ir-aci --replicas 10
 
 To clean up:
 ```
-$ helm del purge aci-demo
+$ helm del purge demo
 $ helm del purge aci-connector
 ```
