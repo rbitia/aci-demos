@@ -6,7 +6,6 @@ import os
 from azure.storage.blob import BlockBlobService
 import sqlite3
 
-
 COPY_PICS_NUM = 10
 
 class DbAzureBlob:
@@ -21,13 +20,19 @@ class DbAzureBlob:
 
 
     def getImageFromAzureBlob(self,filename_src, filename_dest):
-        self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+        try: 
+            self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+        except:
+            print("Error: Getting specific image.")
 
     def getAllImagesFromAzureBlob(self,container,dest_folder):
         generator = self.block_blob_service.list_blobs('pictures')
 
         for blob in generator:
-            self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+            try:
+                self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+            except:
+                print("Error: Getting specific image inside of getAllimages")
 
     def doubleDatabase(self):
         conn = sqlite3.connect('jobs.db')
