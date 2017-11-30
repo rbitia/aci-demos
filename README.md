@@ -72,7 +72,7 @@ Run this script from the `create-aci-connector` folder. The script auto creates 
 
 ```
 $ cd create-aci-connector
-$ python generateManifest.py --create-group --resource-group myConnectorRG --helm
+$ python3 generateManifest.py --resource-group <resource group> --location <location> --subscription-id <subscription id>
 ```
 
 Output
