@@ -85,7 +85,9 @@ while True:
     if(filename[:2] == "._"):
         filename = filename[2:]
 
-    dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)
+    if(not dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)):
+        continue
+    
     print("Got image: ",filename," from blob")
     img = cv2.imread("/app/Pics/" + filename)
 

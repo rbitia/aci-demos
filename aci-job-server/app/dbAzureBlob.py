@@ -22,17 +22,24 @@ class DbAzureBlob:
     def getImageFromAzureBlob(self,filename_src, filename_dest):
         try: 
             self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+            return True
         except:
             print("Error: Getting specific image.")
+            return False
 
     def getAllImagesFromAzureBlob(self,container,dest_folder):
         generator = self.block_blob_service.list_blobs('pictures')
+        success = []
 
         for blob in generator:
             try:
                 self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+                success.append(True)
             except:
                 print("Error: Getting specific image inside of getAllimages")
+                success.append(False)
+                
+        return all(success)
 
     def doubleDatabase(self):
         conn = sqlite3.connect('jobs.db')
