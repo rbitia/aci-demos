@@ -12,6 +12,7 @@ import requests
 from datetime import datetime
 import os
 from dbAzureBlob import DbAzureBlob
+from jobqueue import JobQueue
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -21,10 +22,13 @@ app = Flask(__name__)
 DATABASE_NAME = './jobs.db'
 
 @app.route('/')
-def test():
+def index():
+    q = JobQueue("test",host="http://redis")
+    q.put("hello, world")
+
     return 200
 
-def index():
+def test():
     dbHelper = DbAzureBlob()
 
     if not os.path.isfile(DATABASE_NAME):
