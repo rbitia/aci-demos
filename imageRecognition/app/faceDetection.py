@@ -34,20 +34,21 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
 def getFilename(url):
-    sys.stderr.write('get url')
+    print("WorkerNodeInfo: GET URL:", url)
     try:
         r = requests.get(url)
-    except:
-        sys.stderr.write('url is false')
+    except Exception as ex: 
+        print("WorkerNodeError:", ex)
         return False
 
 
     if(r == None):
-        sys.stderr.write('no request')
+        print('WorkerNodeError: No request')
         return False
 
     if(r.status_code != 200):
-        sys.stderr.write('status code not 200')
+        
+        print('WorkerNodeError: Expected status code 200 actual: ', r.status_code)
         return False
 
     return r.json()
@@ -68,6 +69,10 @@ counter = 0
 
 dbHelper = DbAzureBlob()
 
+print("Sleeping")
+time.sleep(4)
+print("Waking from a betiful nap")
+
 while True:
     response = getFilename(jobserver_url)
 
@@ -87,7 +92,7 @@ while True:
 
     if(not dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)):
         continue
-    
+
     print("Got image: ",filename," from blob")
     img = cv2.imread("/app/Pics/" + filename)
 

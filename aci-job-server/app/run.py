@@ -18,10 +18,12 @@ from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
-DATABASE_NAME = 'jobs.db'
-
+DATABASE_NAME = './jobs.db'
 
 @app.route('/')
+def test():
+    return 200
+
 def index():
     dbHelper = DbAzureBlob()
 
@@ -56,6 +58,7 @@ def index():
     conn.commit()
 
     conn.close()
+
 
     return Response(json.dumps({'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
 

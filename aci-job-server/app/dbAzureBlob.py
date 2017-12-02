@@ -80,6 +80,7 @@ class DbAzureBlob:
             if(blob.name[:2] == "._"):
                 blob.name = blob.name[2:]
             for i in range(COPY_PICS_NUM):
+                print(blob.name)
                 conn.execute("INSERT INTO jobs (filename) \
                     VALUES (\"" + blob.name + "\");")
 
