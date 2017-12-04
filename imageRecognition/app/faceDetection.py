@@ -34,7 +34,6 @@ def draw_rects(img, rects, color):              # Draw a rectangle around the fa
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
 def getFilename(url):
-    sys.stderr.write('get url')
     try:
         r = requests.get(url)
     except:
@@ -43,11 +42,11 @@ def getFilename(url):
 
 
     if(r == None):
-        sys.stderr.write('no request')
+        sys.stderr.write('Worker: No Request')
         return False
 
     if(r.status_code != 200):
-        sys.stderr.write('status code not 200')
+        sys.stderr.write('Worker: Status code not 200')
         return False
 
     return r.json()
@@ -85,7 +84,10 @@ while True:
     if(filename[:2] == "._"):
         filename = filename[2:]
 
-    dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)
+    if(not dbHelper.getImageFromAzureBlob(filename,"/app/Pics/" + filename)):
+        print("Failed to get image", filename)
+        continue
+
     print("Got image: ",filename," from blob")
     img = cv2.imread("/app/Pics/" + filename)
 
@@ -97,9 +99,7 @@ while True:
     rects = detect(gray, cascade)
 
     if rects != []:
-        sys.stderr.write('\ntrue rect')          # Count the number of images with faces
         sendRes(jobserver_url,realFilename,"true")
 
     else:
-        sys.stderr.write('\nfalse rect')
         sendRes(jobserver_url,realFilename,"false")

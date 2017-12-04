@@ -10,8 +10,6 @@ services:
       - ./.env
   aci-worker:
     build: ./imageRecognition/
-    links:
-      - jobserver
     ports:
       - '8000:80'
     depends_on:
@@ -20,8 +18,6 @@ services:
       - ./.env
   aci-ui:
     build: ./demo-aci-image/
-    links:
-      - jobserver
     ports:
       - "8080:80"
     depends_on:

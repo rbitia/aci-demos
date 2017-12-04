@@ -21,13 +21,28 @@ class DbAzureBlob:
 
 
     def getImageFromAzureBlob(self,filename_src, filename_dest):
-        self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+        try:
+            self.block_blob_service.get_blob_to_path('pictures', filename_src, filename_dest)
+            return True
+        except Exception as ex:
+            print("getImageFromAzureBlob: ", ex)
+            return False
+
 
     def getAllImagesFromAzureBlob(self,container,dest_folder):
         generator = self.block_blob_service.list_blobs('pictures')
 
+        success = []
+
         for blob in generator:
-            self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+            try:
+                self.block_blob_service.get_blob_to_path(container, blob.name, dest_folder + blob.name)
+                success.append(True)
+            except Exception as ex:
+                print("getAllImagesFromAzureBlob: ", ex)
+                success.append(False)
+            
+        return all(success)
 
     def doubleDatabase(self):
         conn = sqlite3.connect('jobs.db')
