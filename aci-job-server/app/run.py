@@ -66,6 +66,9 @@ def processed():
     filename = request.args.get('filename')
     detected = request.args.get('detected')
 
+    if(filename == None or detected == None):
+        return 200
+
     if(detected == "true"):
         conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
     else:
