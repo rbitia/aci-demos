@@ -98,8 +98,8 @@ def reuseDb():
 
     time_data = conn.execute("select * from time where id = 1;").fetchone()
 
-    return json.dumps(time_data)
-    #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
+    #return json.dumps(time_data)
+    return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
 @app.route('/getProgress')
 def getProgress():

@@ -3,7 +3,7 @@ services:
   jobserver:
     build: ./aci-job-server/
     ports:
-      - '80:80'
+      - '3000:80'
     volumes:
       - './aci-job-server/logs/:/var/log/uwsgi/app/'
     env_file:

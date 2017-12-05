@@ -34,15 +34,15 @@ frontend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr.<domain name>.com
+      - fr.containerdemos.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-<domain name>-com
+      - secretName: fr-containerdemos-com
         hosts:
-          - fr.<domain name>.com
+          - fr.containerdemos.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -72,15 +72,15 @@ backend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr-backend.<domain name>.com
+      - fr-backend.containerdemos.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-backend-<domain name>-com
+      - secretName: fr-backend-containerdemos-com
         hosts:
-          - fr-backend.<domain name>.com
+          - fr-backend.containerdemos.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
