@@ -19,6 +19,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           imagePullPolicy: "{{ .Values.backend.image.pullPolicy }}"
+          env:
+          - name: AZURE_BLOB_ACCOUNT
+            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           ports:
             - containerPort: {{ .Values.backend.service.internalPort }}
           livenessProbe:

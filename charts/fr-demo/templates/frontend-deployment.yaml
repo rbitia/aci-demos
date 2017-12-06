@@ -22,6 +22,8 @@ spec:
           env:
           - name: IP_JOB_SERVER
             value: "{{ index .Values.backend.ingress.hosts 0 }}"
+          - name: AZURE_BLOB_ACCOUNT
+            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           ports:
             - containerPort: {{ .Values.frontend.service.internalPort }}
           livenessProbe:

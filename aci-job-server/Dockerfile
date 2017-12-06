@@ -21,4 +21,4 @@ RUN mkdir -p /var/log/nginx/app /var/log/uwsgi/app /var/log/supervisor \
 
 RUN pip3 install -r /var/www/app/requirements.txt
 
-CMD ["/usr/bin/supervisord"]
+CMD ["python3", "/var/www/app/run.py"]
