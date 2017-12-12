@@ -61,6 +61,7 @@ def sendRes(url, filename, detected):
 #make a request
 jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
 print("JOB SERVER URL: ", jobserver_url)
+print("JOB SERVER URL3: ",os.getenv('IP_JOB_SERVER'))
 
 
 counter = 0
