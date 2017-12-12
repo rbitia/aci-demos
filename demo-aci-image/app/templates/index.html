@@ -410,7 +410,7 @@ and the experimental ACI-connector -->
                 $.ajax({
                         type: 'GET',
                         dataType: "jsonp",
-                        url: "//{{jobserver_url}}/resetDb",
+                        url: "{{jobserver_url}}/resetDb",
                         headers: {
                             "Access-Control-Allow-Origin": "*",
                             "Access-Control-Allow-Headers": "origin, content-type, accept"
@@ -428,7 +428,7 @@ and the experimental ACI-connector -->
                     $.ajax({
                         type: 'GET',
                         dataType: "jsonp",
-                        url: "http://{{jobserver_url}}/getProgress",
+                        url: "{{jobserver_url}}/getProgress",
                         headers: {
                             "Access-Control-Allow-Origin": "*",
                             "Access-Control-Allow-Headers": "origin, content-type, accept"
@@ -467,6 +467,7 @@ and the experimental ACI-connector -->
                             }
                         },
                         error: function (responseData, textStatus, errorThrown) {
+                            console.log(responseData)
                             console.log(errorThrown)
                             console.log('POST failed.');
                         }

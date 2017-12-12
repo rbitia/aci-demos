@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: "{{ .Values.frontend.image.pullPolicy }}"
           env:
           - name: IP_JOB_SERVER
-            value: "{{ index .Values.backend.ingress.hosts 0 }}"
+            value: "{{ include "fullname" . }}-{{ .Values.backend.service.name }}:{{ .Values.backend.service.externalPort }}"
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           ports:

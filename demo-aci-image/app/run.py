@@ -16,7 +16,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    jobserver_url = os.getenv('IP_JOB_SERVER', "localhost:80")
+    jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
+    print("SERVER#############: ", os.getenv('IP_JOB_SERVER'))
     return render_template('index.html', jobserver_url = jobserver_url)
 
 if __name__ == '__main__':

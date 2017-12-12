@@ -106,6 +106,9 @@ def reuseDb():
 
 @app.route('/getProgress')
 def getProgress():
+    print("GOT IT #############################")
+    exit(-1)
+
     current_time = datetime.now()
 
     conn = sqlite3.connect(DATABASE_NAME)
