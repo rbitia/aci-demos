@@ -19,7 +19,7 @@ services:
   aci-ui:
     build: ./demo-aci-image/
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - jobserver
     volumes:
