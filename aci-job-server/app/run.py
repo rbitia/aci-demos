@@ -67,7 +67,7 @@ def processed():
     detected = request.args.get('detected')
 
     if(filename == None or detected == None):
-        return 200
+        return json.dumps({"success":True,"status_code":200})
 
     if(detected == "true"):
         conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
@@ -77,7 +77,7 @@ def processed():
     conn.commit()
 
     conn.close()
-    return 200
+    return json.dumps({"success":True,"status_code":200})
 
 
 @app.route('/resetDb')
@@ -85,7 +85,7 @@ def resetDb():
     ''' Use to delete the cache db and start the process again'''
     os.remove(DATABASE_NAME)
 
-    return request.args.get('callback') + "(" +  json.dumps({"success":True,"status_code":200}) + ")"
+    return json.dumps({"success":True,"status_code":200})
 
 
 @app.route('/reuseDb')
@@ -101,13 +101,11 @@ def reuseDb():
 
     time_data = conn.execute("select * from time where id = 1;").fetchone()
 
-    #return json.dumps(time_data)
-    return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
+    return json.dumps(time_data)
+    #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
 @app.route('/getProgress')
 def getProgress():
-    print("GOT IT #############################")
-    exit(-1)
 
     current_time = datetime.now()
 
@@ -141,9 +139,7 @@ def getProgress():
 
     json_data = json.dumps(data)
 
-    callback = request.args.get('callback')
-
-    return callback  + "(" +  json_data + ")"
+    return json_data 
 
 
 if __name__ == '__main__':

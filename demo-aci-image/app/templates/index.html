@@ -108,7 +108,7 @@ and the experimental ACI-connector -->
                                         </div>
                                         <div class="col-xs-7">
                                             <div class="numbers">
-                                                <p>Number of Pictures Processed</p>
+                                                <p>Pictures Processed</p>
                                                 <span id="pic-num">0</span>
                                             </div>
                                         </div>
@@ -412,12 +412,7 @@ and the experimental ACI-connector -->
     $('#reset-btn').on('click', function () {
         $.ajax({
             type: 'GET',
-            dataType: "jsonp",
-            url: "//{{jobserver_url}}/resetDb",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "origin, content-type, accept"
-            },
+            url: "/resetDb",
             success: function (fullData, textStatus, jqXHR) {
                 console.log("Reset the database");
             }
@@ -430,12 +425,8 @@ and the experimental ACI-connector -->
         setInterval(function () {
             $.ajax({
                 type: 'GET',
-                dataType: "jsonp",
-                url: "//{{jobserver_url}}/getProgress",
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "origin, content-type, accept"
-                },
+                dataType: "json",
+                url: "/getProgress",
                 success: function (fullData, textStatus, jqXHR) {
                     var detected = 1;
                     var all = 1;
