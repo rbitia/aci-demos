@@ -54,6 +54,7 @@ class DbAzureBlob:
 
     def setupDatabase(self):
         conn = sqlite3.connect('jobs.db')
+        print("Reseting the database")
 
         conn.execute('''DROP TABLE IF EXISTS jobs;''')
         conn.execute('''
@@ -77,6 +78,8 @@ class DbAzureBlob:
         ''')
 
         conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24","2017-09-23 18:28:24",0,0);')
+
+        conn.commit()
 
         generator = self.block_blob_service.list_blobs('pictures')
         for blob in generator:

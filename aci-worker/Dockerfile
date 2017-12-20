@@ -28,10 +28,9 @@ RUN cd \
 	&& rm 3.1.0.zip \
 	&& rm -rf opencv-3.1.0
 
-COPY app/ /app
-
-WORKDIR /app
-
+COPY ./app/requirements.txt .
 RUN pip3 install -r ./requirements.txt
 
-CMD ["python3", "faceDetection.py"]
+COPY app/ /app
+WORKDIR /app
+CMD ["python3", "run.py"]

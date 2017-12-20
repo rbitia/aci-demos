@@ -8,8 +8,11 @@ RUN apt-get update && apt-get install -y \
     sqlite3 libsqlite3-dev \
     build-essential libssl-dev libffi-dev
 
-COPY app /var/www/app
 
-RUN pip3 install -r /var/www/app/requirements.txt
+COPY ./app/requirements.txt .
+RUN pip3 install -r ./requirements.txt
 
-CMD ["python3", "/var/www/app/run.py"]
+COPY app/ /app
+WORKDIR /app
+
+CMD ["python3", "run.py"]

@@ -20,12 +20,12 @@ app = Flask(__name__)
 
 DATABASE_NAME = 'jobs.db'
 
-
 @app.route('/')
 def index():
     dbHelper = DbAzureBlob()
 
     if not os.path.isfile(DATABASE_NAME):
+        print("reseting")
         dbHelper.setupDatabase()
     
     conn = sqlite3.connect(DATABASE_NAME)
@@ -62,6 +62,9 @@ def index():
 
 @app.route('/processed')
 def processed():
+    if not os.path.isfile(DATABASE_NAME):
+        DbAzureBlob().setupDatabase()
+
     conn = sqlite3.connect(DATABASE_NAME)
     filename = request.args.get('filename')
     detected = request.args.get('detected')
@@ -106,6 +109,8 @@ def reuseDb():
 
 @app.route('/getProgress')
 def getProgress():
+    if not os.path.isfile(DATABASE_NAME):
+        DbAzureBlob().setupDatabase()
 
     current_time = datetime.now()
 
@@ -133,6 +138,7 @@ def getProgress():
         pictures.append(obj)
 
     data = {
+        "success": True,
         "pictures": pictures,
         "total_time": int(total_time)
     }
@@ -143,6 +149,6 @@ def getProgress():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=80)
+    app.run(debug=True,host='0.0.0.0',port=8000)
 
 

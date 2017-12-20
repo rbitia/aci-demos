@@ -1,7 +1,7 @@
 # Settings for the facial image recognizer
 imageRecognizer:
   replicaCount:
-    pods: 2
+    pods: 1
     aci: 0
   image:
     repository: rbitia/fr-ir
@@ -9,11 +9,11 @@ imageRecognizer:
     pullPolicy: Always
   resources:
     limits:
-     cpu: 50m
-     memory: 128Mi
+     cpu: 500m
+     memory: 256Mi
     requests:
-     cpu: 50m
-     memory: 128Mi
+     cpu: 500m
+     memory: 256Mi
   azureBlob:
     storageAccount: acidemopictures
     key: Tk23/kL9aC1FVUk0ysYlsN0mmsnmjXzdPM3zPlRWC1VHZetQNrcPgXxB4sF9/XAp9vw4bNkZ9LePJ3jGdk2cWA==
@@ -67,7 +67,7 @@ backend:
     name: backend
     type: ClusterIP
     externalPort: 80
-    internalPort: 80
+    internalPort: 8000
   ingress:
     enabled: true
     # Used to create an Ingress record.

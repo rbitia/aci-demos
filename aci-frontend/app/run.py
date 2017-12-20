@@ -9,7 +9,6 @@ from flask import Flask
 from dbAzureBlob import DbAzureBlob
 import requests
 import json
-from ...azureBlobUtil import azureblob
 
 
 import os
@@ -19,18 +18,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    print("test")
     return render_template('index.html')
 
 @app.route('/getProgress')
 def getProgress():
 
     jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
-    print(jobserver_url)
     res = getRequest(jobserver_url + "/getProgress")
 
     if res == False:
-        print("FAIL TO SEND")
+        print("No Response from Jobserver")
         return json.dumps({"error":True})
 
     return json.dumps(res)

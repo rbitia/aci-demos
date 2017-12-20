@@ -428,35 +428,39 @@ and the experimental ACI-connector -->
                 dataType: "json",
                 url: "/getProgress",
                 success: function (fullData, textStatus, jqXHR) {
-                    var detected = 1;
-                    var all = 1;
+                    if(fullData['success']){
+                        
+                        var detected = 1;
+                        var all = 1;
 
-                    total_time = fullData['total_time']
-                    seconds = Math.floor(total_time % 60)
-                    minutes = Math.floor(total_time / 60)
+                        total_time = fullData['total_time']
+                        seconds = Math.floor(total_time % 60)
+                        minutes = Math.floor(total_time / 60)
 
-                    data = fullData['pictures']
+                        data = fullData['pictures']
+                        console.log(data)
 
-                    $("#pic-num").text(data.length)
+                        $("#pic-num").text(data.length)
 
-                    $("#total_time").text(minutes + "m " + seconds + "s")
+                        $("#total_time").text(minutes + "m " + seconds + "s")
 
-                    $("#pic-rate").text((data.length / total_time).toPrecision(4));
+                        $("#pic-rate").text((data.length / total_time).toPrecision(4));
 
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].detected == 1 && detected < 13) {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].detected == 1 && detected < 13) {
 
-                            $("#d-" + detected).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
-                            detected++;
+                                $("#d-" + detected).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
+                                detected++;
 
-                        }
-                        else if (all < 13) {
+                            }
+                            else if (all < 13) {
 
-                            $("#all-" + all).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
-                            all++;
-                        }
-                        else {
-                            break;
+                                $("#all-" + all).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
+                                all++;
+                            }
+                            else {
+                                break;
+                            }
                         }
                     }
                 },
