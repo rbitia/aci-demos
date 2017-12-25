@@ -26,16 +26,12 @@ def detect(img, cascade):                       # Figure out if the image has a 
     try:
         rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
     except Exception as e:
-        print("cuaght")
         print(e)
 
-    print("in3")
     if len(rects) == 0:                        # No face found
-        print("in4")
         return []
 
     rects[:,2:] += rects[:,:2]                  # Face found
-    print("in5")
     return rects
 
 
@@ -46,8 +42,6 @@ def getFilename(url):
         print('url is false')
         return False
 
-    print("made it through")
-
     if(r == None):
         print('Worker: No Request')
         return False
@@ -55,12 +49,6 @@ def getFilename(url):
     if(r.status_code != 200):
         print('Worker: Status code not 200')
         return False
-    
-    try:
-        print("make it close")
-        return r.json()
-    except:
-        print("bad shit")
 
     return r.json()
 
@@ -83,10 +71,8 @@ counter = 0
 dbHelper = DbAzureBlob()
 
 while True:
-    print("starting loop")
     response = getFilename(jobserver_url)
 
-    print("Got the response")
     if(response == False):
         print("Failed to get response from jobserver")
         time.sleep(1)
@@ -102,7 +88,6 @@ while True:
     if(filename[:2] == "._"):
         filename = filename[2:]
 
-    print("getting ready for image blob")
     if(not dbHelper.getImageFromAzureBlob(filename, PICTURE_DIR + filename)):
         print("Failed to get image", filename)
         continue
@@ -115,16 +100,11 @@ while True:
         print("Image is none!")
         continue
 
-    print("made it to cacase")
     cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    print("loaded that2")
     gray = cv2.equalizeHist(gray)
-    print("loaded that3")
     rects = detect(gray, cascade)
-
-    print("past detection")
 
     if rects != []:
         sendRes(jobserver_url,realFilename,"true")

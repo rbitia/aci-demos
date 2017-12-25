@@ -27,13 +27,6 @@ spec:
             value: "{{ .Values.imageRecognizer.azureBlob.key }}"
           - name: PYTHONUNBUFFERED
             value: "0"          
-          resources:
-            requests:
-              memory: "{{ .Values.imageRecognizer.resources.requests.memory }}"
-              cpu: "{{ .Values.imageRecognizer.resources.requests.cpu }}"
-            limits:
-              memory: "{{ .Values.imageRecognizer.resources.limits.memory }}"
-              cpu: "{{ .Values.imageRecognizer.resources.limits.cpu }}"
           volumeMounts:
           - mountPath: /Pics
             name: pic-volume
