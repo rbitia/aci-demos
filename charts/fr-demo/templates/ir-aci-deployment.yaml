@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.imageRecognizer.replicaCount.pods }}
+  replicas: {{ .Values.imageRecognizer.replicaCount.aci }}
   template:
     metadata:
       labels:
