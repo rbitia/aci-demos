@@ -1,7 +1,7 @@
 # Settings for the facial image recognizer
 imageRecognizer:
   replicaCount:
-    pods: 2
+    pods: 1
     aci: 0
   image:
     repository: rbitia/fr-ir
@@ -9,14 +9,13 @@ imageRecognizer:
     pullPolicy: Always
   resources:
     limits:
-     cpu: 50m
-     memory: 128Mi
+     cpu: 500m
+     memory: 256Mi
     requests:
-     cpu: 50m
-     memory: 128Mi
+     cpu: 500m
+     memory: 256Mi
   azureBlob:
     storageAccount: acidemopictures
-    key: Tk23/kL9aC1FVUk0ysYlsN0mmsnmjXzdPM3zPlRWC1VHZetQNrcPgXxB4sF9/XAp9vw4bNkZ9LePJ3jGdk2cWA==
 
 # Settings for the Facial Recognizer UI
 frontend:
@@ -28,21 +27,21 @@ frontend:
   service:
     name: frontend
     type: ClusterIP
-    externalPort: 80
-    internalPort: 80
+    externalPort: 8080
+    internalPort: 8080
   ingress:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr.<domain name>.com
+      - fr.containerdemos.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-<domain name>-com
+      - secretName: fr-containerdemos-com
         hosts:
-          - fr.<domain name>.com
+          - fr.containerdemos.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -67,20 +66,20 @@ backend:
     name: backend
     type: ClusterIP
     externalPort: 80
-    internalPort: 80
+    internalPort: 8000
   ingress:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr-backend.<domain name>.com
+      - fr-backend.containerdemos.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-backend-<domain name>-com
+      - secretName: fr-backend-containerdemos-com
         hosts:
-          - fr-backend.<domain name>.com
+          - fr-backend.containerdemos.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little

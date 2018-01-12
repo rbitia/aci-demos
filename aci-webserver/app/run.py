@@ -20,12 +20,12 @@ app = Flask(__name__)
 
 DATABASE_NAME = 'jobs.db'
 
-
 @app.route('/')
 def index():
     dbHelper = DbAzureBlob()
 
     if not os.path.isfile(DATABASE_NAME):
+        print("reseting")
         dbHelper.setupDatabase()
     
     conn = sqlite3.connect(DATABASE_NAME)
@@ -62,9 +62,15 @@ def index():
 
 @app.route('/processed')
 def processed():
+    if not os.path.isfile(DATABASE_NAME):
+        DbAzureBlob().setupDatabase()
+
     conn = sqlite3.connect(DATABASE_NAME)
     filename = request.args.get('filename')
     detected = request.args.get('detected')
+
+    if(filename == None or detected == None):
+        return json.dumps({"success":True,"status_code":200})
 
     if(detected == "true"):
         conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
@@ -74,7 +80,7 @@ def processed():
     conn.commit()
 
     conn.close()
-    return 200
+    return json.dumps({"success":True,"status_code":200})
 
 
 @app.route('/resetDb')
@@ -82,7 +88,7 @@ def resetDb():
     ''' Use to delete the cache db and start the process again'''
     os.remove(DATABASE_NAME)
 
-    return request.args.get('callback') + "(" +  json.dumps({"success":True,"status_code":200}) + ")"
+    return json.dumps({"success":True,"status_code":200})
 
 
 @app.route('/reuseDb')
@@ -103,6 +109,9 @@ def reuseDb():
 
 @app.route('/getProgress')
 def getProgress():
+    if not os.path.isfile(DATABASE_NAME):
+        DbAzureBlob().setupDatabase()
+
     current_time = datetime.now()
 
     conn = sqlite3.connect(DATABASE_NAME)
@@ -129,18 +138,17 @@ def getProgress():
         pictures.append(obj)
 
     data = {
+        "success": True,
         "pictures": pictures,
         "total_time": int(total_time)
     }
 
     json_data = json.dumps(data)
 
-    callback = request.args.get('callback')
-
-    return callback  + "(" +  json_data + ")"
+    return json_data 
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(debug=True,host='0.0.0.0',port=8000)
 
 

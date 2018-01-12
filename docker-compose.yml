@@ -3,15 +3,13 @@ services:
   jobserver:
     build: ./aci-job-server/
     ports:
-      - '80:80'
+      - '3000:80'
     volumes:
       - './aci-job-server/logs/:/var/log/uwsgi/app/'
     env_file:
       - ./.env
   aci-worker:
     build: ./imageRecognition/
-    links:
-      - jobserver
     ports:
       - '8000:80'
     depends_on:
@@ -20,10 +18,8 @@ services:
       - ./.env
   aci-ui:
     build: ./demo-aci-image/
-    links:
-      - jobserver
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - jobserver
     volumes:

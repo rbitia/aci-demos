@@ -24,12 +24,13 @@ spec:
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           - name: AZURE_BLOB_KEY
-            value: "{{ .Values.imageRecognizer.azureBlob.key }}"            
-          resources:
-            requests:
-              memory: "{{ .Values.imageRecognizer.resources.requests.memory }}"
-              cpu: "{{ .Values.imageRecognizer.resources.requests.cpu }}"
-            limits:
-              memory: "{{ .Values.imageRecognizer.resources.limits.memory }}"
-              cpu: "{{ .Values.imageRecognizer.resources.limits.cpu }}"
+            value: "{{ .Values.imageRecognizer.azureBlob.key }}"
+          - name: PYTHONUNBUFFERED
+            value: "0"          
+          volumeMounts:
+          - mountPath: /Pics
+            name: pic-volume
+      volumes:
+      - name: pic-volume
+        emptyDir: {}
       dnsPolicy: ClusterFirst
