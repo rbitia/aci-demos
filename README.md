@@ -68,28 +68,9 @@ Now checkout the UI which is usually at fr.<your domain>
 The rate will be super slow because we have a 1 node AKS cluster running 2 pods.
 
 Deploy the ACI connector :
-Run this script from the `create-aci-connector` folder. The script auto creates a service principal at the resource group level and will populate a Helm chart for you.
-
 ```
-$ cd create-aci-connector
-$ python3 generateManifest.py --resource-group <resource group> --location <location> --subscription-id <subscription id>
+az aks install-connector --resource-group myResourceGroup --name myK8sCluster --connector-name myaciconnector
 ```
-
-Output
-
-```
-('Creating Resource Group ', 'myResourceGroup')
-Using defalut location: westus
-Creating Service Principal
-Retrying role assignment creation: 1/36
-Retrying role assignment creation: 2/36
-Retrying role assignment creation: 3/36
-Run the following command to install the ACI connector:
------Begin Command----
-helm install --name my-release --set env.azureClientId=b75b5741-b091-4e62-a7bf-000000000000,env.azureClientKey=0f7bf673-5372-4a1c-b5d9-000000000000,env.azureTenantId=72f988bf-86f1-41af-91ab-2000000000000,env.azureSubscriptionId=3762d87c-ddb8-425f-b2fc-000000000000,env.aciResourceGroup=myResourceGroup,env.aciRegion=westus ../charts/aci-connector
------End Command----
-```
-Install the ACI Connector from the helm chart specified in the output from the command above.
 
 The connector has been deployed and with a `kubectl get nodes` you can see that the ACI Connector is a new node in your cluster. Now scale up the image recognizer to 10 using the following command
 
@@ -110,7 +91,7 @@ This is powerful stuff.  Here we can see AKS and ACI combine to provide the bes
 Once you've done all the set up you just need these commands during the live demo:
 ```
 $ helm install charts/fr-demo --name demo
-$ helm install --name aci-connector --set env.azureClientId=b75b5741-b091-4e62-a7bf-000000000000,env.azureClientKey=0f7bf673-5372-4a1c-b5d9-000000000000,env.azureTenantId=72f988bf-86f1-41af-91ab-2000000000000,env.azureSubscriptionId=3762d87c-ddb8-425f-b2fc-000000000000,env.aciResourceGroup=myResourceGroup,env.aciRegion=westus ../charts/aci-connector
+$ az aks install-connector --resource-group myResourceGroup --name myK8sCluster --connector-name myaciconnector
 $ kubectl scale deploy demo-fr-ir-aci --replicas 10
 ```
 
@@ -118,5 +99,5 @@ $ kubectl scale deploy demo-fr-ir-aci --replicas 10
 To clean up:
 ```
 $ helm del --purge demo
-$ helm del --purge aci-connector
+$ az aks remove-connector --resource-group myResourceGroup --name myAKSCluster --connector-name myaciconnector
 ```
