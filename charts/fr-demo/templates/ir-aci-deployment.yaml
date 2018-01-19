@@ -34,4 +34,7 @@ spec:
       - name: pic-volume
         emptyDir: {}
       dnsPolicy: ClusterFirst
-      nodeName: aci-connector
+      nodeName: virtual-kubelet-myaciconnector-linux
+      tolerations:
+      - key: azure.com/aci
+        effect: NoSchedule
