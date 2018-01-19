@@ -29,8 +29,8 @@ spec:
             value: "0"
           resources:
             requests:
-            memory: 1G
-            cpu: 1
+              memory: 1G
+              cpu: 1
           volumeMounts:
           - mountPath: /Pics
             name: pic-volume
