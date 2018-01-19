@@ -27,6 +27,10 @@ spec:
             value: "{{ .Values.imageRecognizer.azureBlob.key }}"
           - name: PYTHONUNBUFFERED
             value: "0"
+          resources:
+            requests:
+            memory: 1G
+            cpu: 1
           volumeMounts:
           - mountPath: /Pics
             name: pic-volume
