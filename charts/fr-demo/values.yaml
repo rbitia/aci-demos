@@ -33,15 +33,15 @@ frontend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr.containerdemos.com
+      - fr.rbitia.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-containerdemos-com
+      - secretName: fr-rbitia-com
         hosts:
-          - fr.containerdemos.com
+          - fr.rbitia.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -71,15 +71,15 @@ backend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr-backend.containerdemos.com
+      - fr-backend.rbitia.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-backend-containerdemos-com
+      - secretName: fr-backend-rbitia-com
         hosts:
-          - fr-backend.containerdemos.com
+          - fr-backend.rbitia.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
