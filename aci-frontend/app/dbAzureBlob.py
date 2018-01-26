@@ -6,7 +6,7 @@ import os
 from azure.storage.blob import BlockBlobService
 import sqlite3
 
-COPY_PICS_NUM = 10
+COPY_PICS_NUM = 1
 
 class DbAzureBlob:
     
