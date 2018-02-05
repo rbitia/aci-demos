@@ -21,22 +21,22 @@ PICTURE_DIR = "/Pics/"
 
 start_time = time.time()                        # Start the timer
 
-def detect(img, cascade):                       # Figure out if the image has a face
-    rects = []
+def detect(img, cascade, eyeCascade):                       # Figure out if the image has a face
+    rects, eyes = [], []
     try:
         rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
         print ("rects", rects)
+        for (x,y,w,h) in rects: 
+            roi_gray = gray[y:y+h, x:x+w]
+            eyes = eyeCascade.detectMultiScale(roi_gray)
+            print("eyes:", eyes)
+            if len(eyes):
+                return True                  # face found
 
     except Exception as e:
         print(e)
 
-    if len(rects) == 0:                        # No face found
-        return []
-
-    rects[:,2:] += rects[:,:2]                  # Face found
-
-
-    return rects
+    return False                             # no face found
 
 
 def getFilename(url):
@@ -61,7 +61,7 @@ def sendRes(url, filename, detected):
     try:
         r = requests.get(url + "/processed", params={
                 "detected":detected,
-                "filename":filename
+                "filename":urllib.parse.quote(filename),
             })
     except:
         print("Failed to send response")
@@ -105,12 +105,13 @@ while True:
         continue
 
     cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
+    eyeCascade = cv2.CascadeClassifier('./haarcascade_eye.xml')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
-    rects = detect(gray, cascade)
+    face = detect(gray, cascade, eyeCascade)
 
-    if rects != []:
+    if face:
+        print("face found in: ", realFilename)
         sendRes(jobserver_url,realFilename,"true")
-
     else:
         sendRes(jobserver_url,realFilename,"false")
