@@ -25,6 +25,8 @@ def detect(img, cascade):                       # Figure out if the image has a 
     rects = []
     try:
         rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
+        print ("rects", rects)
+
     except Exception as e:
         print(e)
 
@@ -32,6 +34,8 @@ def detect(img, cascade):                       # Figure out if the image has a 
         return []
 
     rects[:,2:] += rects[:,:2]                  # Face found
+
+
     return rects
 
 
@@ -101,7 +105,6 @@ while True:
         continue
 
     cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
-
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     rects = detect(gray, cascade)
@@ -111,5 +114,3 @@ while True:
 
     else:
         sendRes(jobserver_url,realFilename,"false")
-    
-
