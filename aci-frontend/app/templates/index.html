@@ -446,7 +446,7 @@ and the experimental ACI-connector -->
 
                         $("#pic-rate").text((data.length / total_time).toPrecision(4));
 
-                        for (var i = 0; i < data.length; i++) {
+                        for (var i = data.length - 1; i >= 1; i--) {
                             if (data[i].detected == 1 && detected < 13) {
 
                                 $("#d-" + detected).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
@@ -459,7 +459,7 @@ and the experimental ACI-connector -->
                                 all++;
                             }
                             else {
-                                break;
+                                continue;
                             }
                         }
                     }
