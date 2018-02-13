@@ -449,13 +449,13 @@ and the experimental ACI-connector -->
                         for (var i = data.length - 1; i >= 1; i--) {
                             if (data[i].detected == 1 && detected < 13) {
 
-                                $("#d-" + detected).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
+                                $("#d-" + detected).attr('src', "https://frdemo.blob.core.windows.net/pictures/" + data[i].filename);
                                 detected++;
 
                             }
                             else if (all < 13) {
 
-                                $("#all-" + all).attr('src', "https://acidemopictures.blob.core.windows.net/pictures/" + data[i].filename);
+                                $("#all-" + all).attr('src', "https://frdemo.blob.core.windows.net/pictures/" + data[i].filename);
                                 all++;
                             }
                             else {

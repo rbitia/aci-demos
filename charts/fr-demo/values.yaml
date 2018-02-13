@@ -4,7 +4,7 @@ imageRecognizer:
     pods: 1
     aci: 0
   image:
-    repository: rbitia/fr-ir
+    repository: acidemopics.azurecr.io/rbitia/fr-ir
     tag: latest
     pullPolicy: Always
   resources:
@@ -15,14 +15,14 @@ imageRecognizer:
      cpu: 500m
      memory: .3G
   azureBlob:
-    storageAccount: acidemopictures
+     storageAccount: frdemo
 
 # Settings for the Facial Recognizer UI
 frontend:
   replicaCount: 1
   image:
     repository: rbitia/fr-frontend
-    tag: latest
+    tag: fake
     pullPolicy: Always
   service:
     name: frontend
@@ -59,7 +59,7 @@ frontend:
 backend:
   replicaCount: 1
   image:
-    repository: rbitia/aci-webserver
+    repository: rbitia/fr-backend
     tag: latest
     pullPolicy: Always
   service:
