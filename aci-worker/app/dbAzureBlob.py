@@ -70,7 +70,7 @@ class DbAzureBlob:
             CREATE TABLE time (
             id INTEGER PRIMARY KEY,
             start_time TEXT,
-            finish_time TEXT,
+            end_time TEXT,
             finished INTEGER,
             started INTEGER
         );

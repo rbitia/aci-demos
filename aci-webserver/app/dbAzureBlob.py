@@ -62,22 +62,12 @@ class DbAzureBlob:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 filename NOT NULL,
                 processed INTEGER DEFAULT 0 NOT NULL,
-                detected INTEGER DEFAULT NULL
+                detected INTEGER DEFAULT NULL,
+                start_time INTEGER DEFAULT NULL,
+                end_time INTEGER DEFAULT NULL,
+                worker_id TEXT
             );
             ''')
-
-        conn.execute('DROP TABLE IF EXISTS time;')
-        conn.execute('''
-            CREATE TABLE time (
-            id INTEGER PRIMARY KEY,
-            start_time TEXT,
-            finish_time TEXT,
-            finished INTEGER,
-            started INTEGER
-        );
-        ''')
-
-        conn.execute('INSERT INTO time values(1,"2017-09-23 18:28:24","2017-09-23 18:28:24",0,0);')
 
         conn.commit()
 

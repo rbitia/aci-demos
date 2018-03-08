@@ -199,6 +199,13 @@ and the experimental ACI-connector -->
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <canvas id="rate-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -421,6 +428,37 @@ and the experimental ACI-connector -->
 
     //Add auto updating code for the numbers
     $(function () {
+        var ctx = document.getElementById('rate-chart').getContext('2d');
+
+        var config = {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Picture Process Rate",
+                    fill: false,
+                    yAxisID: 'y-axis-1',
+                    borderColor: 'rgb(255,0,0)',
+                    data: [],
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                scales: {
+						yAxes: [{
+							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							display: true,
+							position: 'left',
+							id: 'y-axis-1',
+						}],
+					}                
+            }
+        };
+        var chart = new Chart(ctx, config); 
 
         setInterval(function () {
             $.ajax({
@@ -440,11 +478,23 @@ and the experimental ACI-connector -->
                         data = fullData['pictures']
                         console.log(data)
 
+                        pic_rate = (fullData['speed']).toPrecision(4)
+
                         $("#pic-num").text(data.length)
 
                         $("#total_time").text(minutes + "m " + seconds + "s")
 
-                        $("#pic-rate").text((data.length / total_time).toPrecision(4));
+                        $("#pic-rate").text(pic_rate);
+                        if (total_time > 0)
+                        {
+                            config.data.labels.push(total_time);
+                            config.data.datasets[0].data.push({
+                                x: total_time,
+                                y: pic_rate
+                            });
+                        }
+
+                        chart.update();
 
                         for (var i = data.length - 1; i >= 1; i--) {
                             if (data[i].detected == 1 && detected < 13) {
@@ -494,4 +544,6 @@ and the experimental ACI-connector -->
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 <script src="/static/dashboard/assets/js/demo.js"></script>
 
+<!-- Chart.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
 </html>

@@ -11,15 +11,17 @@ import cv2
 from PIL import Image
 import glob
 import os
+import socket
 import time
+import datetime
 import requests
-import time
+import urllib.parse
 
 from dbAzureBlob import DbAzureBlob
 
-PICTURE_DIR = "/Pics/"
+PICTURE_DIR = ""
 
-start_time = time.time()                        # Start the timer
+start_time = datetime.datetime.utcnow()                        # Start the timer
 
 def detect(img, cascade, eyeCascade):                       # Figure out if the image has a face
     rects, eyes = [], []
@@ -41,7 +43,7 @@ def detect(img, cascade, eyeCascade):                       # Figure out if the 
 
 def getFilename(url):
     try:
-        r = requests.get(url)
+        r = requests.get(url + "/getFile")
     except:
         print('url is false')
         return False
@@ -57,11 +59,14 @@ def getFilename(url):
     return r.json()
 
 #grab the filename request
-def sendRes(url, filename, detected):
+def sendRes(url, filename, detected, start_time, end_time):
     try:
         r = requests.get(url + "/processed", params={
                 "detected":detected,
                 "filename":urllib.parse.quote(filename),
+                "start_time": start_time,
+                "end_time": end_time,
+                "worker_id": socket.gethostname()
             })
     except:
         print("Failed to send response")
@@ -92,11 +97,18 @@ while True:
     if(filename[:2] == "._"):
         filename = filename[2:]
 
+    process_start_time = datetime.datetime.utcnow()
+    # time.sleep(5)
+    # download_end_time = datetime.datetime.utcnow()
+    # time.sleep(5)
+    # detect_end_time = datetime.datetime.utcnow()
+    # face = False
     if(not dbHelper.getImageFromAzureBlob(filename, PICTURE_DIR + filename)):
         print("Failed to get image", filename)
         continue
 
-    print("Got image: ", filename, " from blob")
+    download_end_time = datetime.datetime.utcnow()
+    print("Got image: ", filename, " from blob " + "in " + str((download_end_time - process_start_time).total_seconds()))
     img = cv2.imread(PICTURE_DIR  + filename)
     os.remove(PICTURE_DIR  + filename)
 
@@ -110,8 +122,6 @@ while True:
     gray = cv2.equalizeHist(gray)
     face = detect(gray, cascade, eyeCascade)
 
-    if face:
-        print("face found in: ", realFilename)
-        sendRes(jobserver_url,realFilename,"true")
-    else:
-        sendRes(jobserver_url,realFilename,"false")
+    detect_end_time = datetime.datetime.utcnow()
+    print("face found:" + str(face) + " in: ", realFilename, " spend:" + str((detect_end_time - process_start_time).total_seconds()))
+    sendRes(jobserver_url,realFilename,"true", process_start_time, detect_end_time)
