@@ -65,7 +65,8 @@ class DbAzureBlob:
                 detected INTEGER DEFAULT NULL,
                 start_time INTEGER DEFAULT NULL,
                 end_time INTEGER DEFAULT NULL,
-                worker_id TEXT
+                worker_id TEXT DEFAULT NULL,
+                processed_time DEFAULT NULL
             );
             ''')
 
