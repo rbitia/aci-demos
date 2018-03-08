@@ -474,6 +474,7 @@ and the experimental ACI-connector -->
                         total_time = fullData['total_time']
                         seconds = Math.floor(total_time % 60)
                         minutes = Math.floor(total_time / 60)
+                        finish = fullData['finish']
 
                         data = fullData['pictures']
                         console.log(data)
@@ -485,7 +486,7 @@ and the experimental ACI-connector -->
                         $("#total_time").text(minutes + "m " + seconds + "s")
 
                         $("#pic-rate").text(pic_rate);
-                        if (total_time > 0)
+                        if (total_time > 0 && (!finish))
                         {
                             config.data.labels.push(total_time);
                             config.data.datasets[0].data.push({

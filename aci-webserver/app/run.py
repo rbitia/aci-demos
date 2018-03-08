@@ -87,7 +87,7 @@ def reuseDb():
     conn.execute("UPDATE jobs set detected = NULL, start_time = NULL, end_time = NULL, processed = 0;" )
     conn.commit()
 
-    return json.dumps({"success": True});
+    return json.dumps({"success": True})
     #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
 @app.route('/getFile')
@@ -96,9 +96,9 @@ def getFile():
         DbAzureBlob().setupDatabase()
 
     conn = sqlite3.connect(DATABASE_NAME)
-    user = request.args.get('user')
     
-    row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
+    timeout_time = datetime.utcnow() - timedelta(seconds=45)
+    row = conn.execute("SELECT * FROM jobs WHERE processed = 0 or (processed = 1 and detected is NULL and processed_time < ?) ORDER BY RANDOM() LIMIT 1 ;", (timeout_time,)).fetchone()
 
     if(row == None ):
         return json.dumps({
@@ -109,7 +109,7 @@ def getFile():
     id = row[0]
     filename = row[1]
 
-    conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";" )
+    conn.execute("UPDATE jobs set processed = 1, processed_time = ? where id = ? ;", (datetime.utcnow(), id))
     conn.commit()
 
     conn.close()
@@ -129,7 +129,7 @@ def getProgress():
     current_time = datetime.utcnow()
 
     conn = sqlite3.connect(DATABASE_NAME)
-    total_rows = conn.execute("SELECT COUNT(*) FROM jobs").fetchone()
+    total_rows = conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
     rows = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;").fetchall()
     if len(rows) > 0 :
         time_range = conn.execute("SELECT MIN(start_time), MAX(end_time) from jobs WHERE detected IS NOT NULL;").fetchone()
@@ -160,7 +160,8 @@ def getProgress():
         "success": True,
         "pictures": pictures,
         "speed": speed,
-        "total_time": int(total_time)
+        "total_time": int(total_time),
+        "finish": len(rows) == total_rows > 0
     }
 
     json_data = json.dumps(data)
