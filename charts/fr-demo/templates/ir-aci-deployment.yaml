@@ -32,8 +32,6 @@ spec:
           volumeMounts:
           - mountPath: /Pics
             name: pic-volume
-      imagePullSecrets: 
-          - name: myacrkey
       volumes:
       - name: pic-volume
         emptyDir: {}

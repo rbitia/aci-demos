@@ -4,7 +4,7 @@ imageRecognizer:
     pods: 1
     aci: 0
   image:
-    repository: acidemopics.azurecr.io/rbitia/fr-ir
+    repository: chadliuxc/fr-ir
     tag: latest
     pullPolicy: Always
   resources:
@@ -21,8 +21,8 @@ imageRecognizer:
 frontend:
   replicaCount: 1
   image:
-    repository: rbitia/fr-frontend
-    tag: fake
+    repository: chadliuxc/fr-frontend
+    tag: latest
     pullPolicy: Always
   service:
     name: frontend
@@ -33,15 +33,15 @@ frontend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr.rbitia.com
+      - fr.sleepless.tk
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: fr-rbitia-com
+      - secretName: fr-dev
         hosts:
-          - fr.rbitia.com
+          - fr.sleepless.tk
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -59,7 +59,7 @@ frontend:
 backend:
   replicaCount: 1
   image:
-    repository: rbitia/fr-backend
+    repository: chadliuxc/aci-webserver
     tag: latest
     pullPolicy: Always
   service:
@@ -71,15 +71,15 @@ backend:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - fr-backend.rbitia.com
+      - bk.sleepless.tk
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
-    tls:
-      # Secrets must be manually created in the namespace.
-      - secretName: fr-backend-rbitia-com
-        hosts:
-          - fr-backend.rbitia.com
+    # tls:
+    #   # Secrets must be manually created in the namespace.
+    #   - secretName: fr-backend-dev
+    #     hosts:
+    #       - bk.sleepless.tk
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
