@@ -84,7 +84,7 @@ def reuseDb():
         return  request.args.get('callback') + "(" +  json.dumps({"success":False}) + ")"
 
     conn = sqlite3.connect(DATABASE_NAME)
-    conn.execute("UPDATE jobs set detected = NULL, start_time = NULL, end_time = NULL, processed = 0;" )
+    conn.execute("UPDATE jobs set detected = NULL, start_time = NULL, end_time = NULL, processed = 0, worker_id = NULL, processed_time = NULL;" )
     conn.commit()
 
     return json.dumps({"success": True})
@@ -160,8 +160,8 @@ def getProgress():
         "success": True,
         "pictures": pictures,
         "speed": speed,
-        "total_time": int(total_time),
-        "finish": len(rows) == total_rows > 0
+        "speed_time": str(current_time),
+        "total_period": int(total_time)
     }
 
     json_data = json.dumps(data)

@@ -426,6 +426,11 @@ and the experimental ACI-connector -->
         });
     })
 
+    function localTimeString(utcTime) {
+        var utcDate = new Date(utcTime +" UTC");
+        return utcDate.toLocaleTimeString();
+    }
+
     //Add auto updating code for the numbers
     $(function () {
         var ctx = document.getElementById('rate-chart').getContext('2d');
@@ -471,11 +476,10 @@ and the experimental ACI-connector -->
                         var detected = 1;
                         var all = 1;
 
-                        total_time = fullData['total_time']
+                        total_time = fullData['total_period']
                         seconds = Math.floor(total_time % 60)
                         minutes = Math.floor(total_time / 60)
-                        finish = fullData['finish']
-
+                        speed_time = localTimeString(fullData['speed_time']);
                         data = fullData['pictures']
                         console.log(data)
 
@@ -486,11 +490,11 @@ and the experimental ACI-connector -->
                         $("#total_time").text(minutes + "m " + seconds + "s")
 
                         $("#pic-rate").text(pic_rate);
-                        if (total_time > 0 && (!finish))
+                        if (total_time > 0)
                         {
-                            config.data.labels.push(total_time);
+                            config.data.labels.push(speed_time);
                             config.data.datasets[0].data.push({
-                                x: total_time,
+                                x: speed_time,
                                 y: pic_rate
                             });
                         }
