@@ -21,6 +21,8 @@ spec:
           env:
           - name: IP_JOB_SERVER
             value: "{{ index .Values.backend.ingress.hosts 0 }}:{{ .Values.backend.service.externalPort }}"
+          - name: SERVER_PATH
+            value: "/api"
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           - name: PYTHONUNBUFFERED
