@@ -22,7 +22,7 @@ def index():
 
 @app.route('/getProgress')
 def getProgress():
-    res = getRequest(getJobServiceUrl + "/getProgress")
+    res = getRequest(getJobServiceUrl() + "/getProgress")
 
     if res == False:
         print("No Response from Jobserver")
@@ -32,7 +32,7 @@ def getProgress():
 
 @app.route('/resetDb')
 def resetDb():
-    res = getRequest(getJobServiceUrl + "/resetDb")
+    res = getRequest(getJobServiceUrl() + "/resetDb")
 
     if res == False:
         return json.dumps({"error":True})
