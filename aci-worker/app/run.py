@@ -72,7 +72,7 @@ def sendRes(url, filename, detected, start_time, end_time):
         print("Failed to send response")
 
 #make a request
-jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost") + os.getenv('SERVER_PATH', "")
+jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost") + "/api"
 print("JOB SERVER URL: ", jobserver_url)
 
 counter = 0
