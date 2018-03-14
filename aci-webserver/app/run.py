@@ -61,7 +61,7 @@ def processed():
     if(filename == None or detected == None):
         return json.dumps({"success":True,"status_code":200})
 
-    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (detected, start_time, end_time, worker_id, filename ) )
+    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (bool(detected), start_time, end_time, worker_id, filename ) )
 
     conn.commit()
 

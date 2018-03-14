@@ -124,4 +124,4 @@ while True:
 
     detect_end_time = datetime.datetime.utcnow()
     print("face found:" + str(face) + " in: ", realFilename, " spend:" + str((detect_end_time - process_start_time).total_seconds()))
-    sendRes(jobserver_url,realFilename,"true", process_start_time, detect_end_time)
+    sendRes(jobserver_url,realFilename, face , process_start_time, detect_end_time)
