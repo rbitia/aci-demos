@@ -427,8 +427,8 @@ and the experimental ACI-connector -->
     })
 
     function localTimeString(utcTime) {
-        var utcDate = new Date(utcTime +" UTC");
-        return utcDate.toLocaleTimeString();
+        var utcDate = new Date(utcTime +"Z");
+        return utcDate.getHours() + ':' + utcDate.getMinutes() + ':' + utcDate.getSeconds();
     }
 
     //Add auto updating code for the numbers
