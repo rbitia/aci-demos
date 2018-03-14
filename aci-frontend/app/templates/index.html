@@ -428,7 +428,9 @@ and the experimental ACI-connector -->
 
     function localTimeString(utcTime) {
         var utcDate = new Date(utcTime +"Z");
-        return utcDate.getHours() + ':' + utcDate.getMinutes() + ':' + utcDate.getSeconds();
+        return ('0' + utcDate.getHours()).slice(-2)
+            + ':' + ('0' + utcDate.getMinutes()).slice(-2)
+            + ':' + ('0' + utcDate.getSeconds()).slice(-2);
     }
 
     //Add auto updating code for the numbers
