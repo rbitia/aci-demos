@@ -32,16 +32,18 @@ frontend:
   ingress:
     enabled: true
     # Used to create an Ingress record.
+    # When use IP access, comment hosts node
     hosts:
-      - fr.sleepless.tk
+      - aci-demo.eastus.cloudapp.azure.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
     tls:
       # Secrets must be manually created in the namespace.
       - secretName: fr-dev
         hosts:
-          - fr.sleepless.tk
+          - aci-demo.eastus.cloudapp.azure.com
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -69,12 +71,15 @@ backend:
     internalPort: 8000
   ingress:
     enabled: true
+    # When use domain access, comment hostIP node and use hosts node
+    # hostIP: 40.121.216.148 
     # Used to create an Ingress record.
     hosts:
-      - bk.sleepless.tk
+      - aci-demo.eastus.cloudapp.azure.com
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
     # tls:
     #   # Secrets must be manually created in the namespace.
     #   - secretName: fr-backend-dev

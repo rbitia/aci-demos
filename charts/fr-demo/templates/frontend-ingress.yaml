@@ -16,15 +16,15 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.frontend.ingress.hosts }}
-    - host: {{ $host }}
-      http:
+    - http:
         paths:
           - path: /
             backend:
               serviceName: {{ $serviceName }}-frontend
               servicePort: {{ $servicePort }}
-    {{- end -}}
+    {{- range $host := .Values.frontend.ingress.hosts }}
+      host: {{ $host }}
+    {{- end }}
   {{- if .Values.frontend.ingress.tls }}
   tls:
 {{ toYaml .Values.frontend.ingress.tls | indent 4 }}
