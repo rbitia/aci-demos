@@ -26,11 +26,11 @@ spec:
             - containerPort: {{ .Values.backend.service.internalPort }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /api
               port: {{ .Values.backend.service.internalPort }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /api
               port: {{ .Values.backend.service.internalPort }}
           resources:
 {{ toYaml .Values.backend.resources | indent 12 }}

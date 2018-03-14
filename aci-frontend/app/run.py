@@ -22,9 +22,7 @@ def index():
 
 @app.route('/getProgress')
 def getProgress():
-
-    jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
-    res = getRequest(jobserver_url + "/getProgress")
+    res = getRequest(getJobServiceUrl() + "/getProgress")
 
     if res == False:
         print("No Response from Jobserver")
@@ -34,8 +32,7 @@ def getProgress():
 
 @app.route('/resetDb')
 def resetDb():
-    jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
-    res = getRequest(jobserver_url + "/resetDb")
+    res = getRequest(getJobServiceUrl() + "/resetDb")
 
     if res == False:
         return json.dumps({"error":True})
@@ -51,6 +48,9 @@ def test():
     print(res['message'])
 
     return json.dumps(res)
+
+def getJobServiceUrl():
+    return "http://" + os.getenv('IP_JOB_SERVER', "localhost") + "/api"
 
 def getRequest(url):
     try:

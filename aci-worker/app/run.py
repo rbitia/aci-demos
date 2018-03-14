@@ -72,7 +72,7 @@ def sendRes(url, filename, detected, start_time, end_time):
         print("Failed to send response")
 
 #make a request
-jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost")
+jobserver_url = "http://" + os.getenv('IP_JOB_SERVER', "localhost") + "/api"
 print("JOB SERVER URL: ", jobserver_url)
 
 counter = 0
@@ -124,4 +124,4 @@ while True:
 
     detect_end_time = datetime.datetime.utcnow()
     print("face found:" + str(face) + " in: ", realFilename, " spend:" + str((detect_end_time - process_start_time).total_seconds()))
-    sendRes(jobserver_url,realFilename,"true", process_start_time, detect_end_time)
+    sendRes(jobserver_url,realFilename, face , process_start_time, detect_end_time)

@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 DATABASE_NAME = 'jobs.db'
 
-@app.route('/')
+@app.route('/api')
 def index():
     dbHelper = DbAzureBlob()
 
@@ -46,7 +46,7 @@ def index():
     return Response(json.dumps({'id': id, 'filename': filename, 'processed': 0 }), status=200, mimetype='application/json')
 
 
-@app.route('/processed')
+@app.route('/api/processed')
 def processed():
     if not os.path.isfile(DATABASE_NAME):
         DbAzureBlob().setupDatabase()
@@ -61,7 +61,7 @@ def processed():
     if(filename == None or detected == None):
         return json.dumps({"success":True,"status_code":200})
 
-    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (detected, start_time, end_time, worker_id, filename ) )
+    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (bool(detected), start_time, end_time, worker_id, filename ) )
 
     conn.commit()
 
@@ -69,7 +69,7 @@ def processed():
     return json.dumps({"success":True,"status_code":200})
 
 
-@app.route('/resetDb')
+@app.route('/api/resetDb')
 def resetDb():
     ''' Use to delete the cache db and start the process again'''
     os.remove(DATABASE_NAME)
@@ -77,7 +77,7 @@ def resetDb():
     return json.dumps({"success":True,"status_code":200})
 
 
-@app.route('/reuseDb')
+@app.route('/api/reuseDb')
 def reuseDb():
     
     if not os.path.isfile(DATABASE_NAME):
@@ -90,7 +90,7 @@ def reuseDb():
     return json.dumps({"success": True})
     #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
-@app.route('/getFile')
+@app.route('/api/getFile')
 def getFile():
     if not os.path.isfile(DATABASE_NAME):
         DbAzureBlob().setupDatabase()
@@ -117,7 +117,7 @@ def getFile():
     return Response(json.dumps({'id': id, 'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
     
 
-@app.route('/getProgress')
+@app.route('/api/getProgress')
 def getProgress():
     if not os.path.isfile(DATABASE_NAME):
         DbAzureBlob().setupDatabase()
