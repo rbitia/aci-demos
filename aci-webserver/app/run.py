@@ -12,14 +12,13 @@ import requests
 from datetime import datetime
 from datetime import timedelta
 import os
-from dbAzureBlob import DbAzureBlob
+from dbAzureBlob import DbAzureBlob, DATABASE_NAME
 
 import logging
 from logging.handlers import RotatingFileHandler
+import urllib
 
 app = Flask(__name__)
-
-DATABASE_NAME = 'jobs.db'
 
 @app.route('/api')
 def index():
@@ -45,6 +44,9 @@ def index():
 
     return Response(json.dumps({'id': id, 'filename': filename, 'processed': 0 }), status=200, mimetype='application/json')
 
+@app.route('/api/test')
+def liveTest():
+    return Response(json.dumps({'status': 'ok!'}), status=200, mimetype='application/json')
 
 @app.route('/api/processed')
 def processed():
@@ -53,7 +55,7 @@ def processed():
 
     conn = sqlite3.connect(DATABASE_NAME)
     id = request.args.get('id')
-    filename = request.args.get('filename')
+    filename = urllib.parse.unquote(request.args.get('filename'))
     detected = request.args.get('detected')
     start_time = request.args.get('start_time')
     end_time = request.args.get('end_time')
@@ -61,7 +63,7 @@ def processed():
     if(filename == None or detected == None):
         return json.dumps({"success":True,"status_code":200})
 
-    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (bool(detected), start_time, end_time, worker_id, filename ) )
+    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (str2bool(detected), start_time, end_time, worker_id, filename ) )
 
     conn.commit()
 
@@ -169,6 +171,9 @@ def getProgress():
     req_end_time = datetime.utcnow()
     print("request spend: " + str((req_start_time - req_end_time).total_seconds()))
     return json_data 
+
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1")
 
 
 if __name__ == '__main__':

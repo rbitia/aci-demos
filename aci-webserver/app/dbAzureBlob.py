@@ -8,6 +8,7 @@ import sqlite3
 
 
 COPY_PICS_NUM = 1
+DATABASE_NAME = os.getenv('DB_PATH', "") + 'jobs.db'
 
 class DbAzureBlob:
     
@@ -45,7 +46,7 @@ class DbAzureBlob:
         return all(success)
 
     def doubleDatabase(self):
-        conn = sqlite3.connect('jobs.db')
+        conn = sqlite3.connect(DATABASE_NAME)
         cursor = conn.execute("SELECT * FROM jobs;")
         for row in cursor:
             conn.execute("INSERT INTO jobs (filename) \
@@ -53,7 +54,7 @@ class DbAzureBlob:
         conn.commit()
 
     def setupDatabase(self):
-        conn = sqlite3.connect('jobs.db')
+        conn = sqlite3.connect(DATABASE_NAME)
         print("Reseting the database")
 
         conn.execute('''DROP TABLE IF EXISTS jobs;''')

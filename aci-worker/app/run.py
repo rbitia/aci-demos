@@ -84,27 +84,31 @@ while True:
 
     if(response == False):
         print("Failed to get response from jobserver")
-        time.sleep(1)
+        time.sleep(5)
         continue
 
     if(response['processed'] == 1):
         print("response is processed")
-        time.sleep(1)
+        time.sleep(5)
 
     filename = response['filename']
+
+    if (filename == "NULL"):
+        print("Get empty image url")
+        time.sleep(5)
+        continue
+
     realFilename = filename
 
     if(filename[:2] == "._"):
         filename = filename[2:]
 
     process_start_time = datetime.datetime.utcnow()
-    # time.sleep(5)
-    # download_end_time = datetime.datetime.utcnow()
-    # time.sleep(5)
-    # detect_end_time = datetime.datetime.utcnow()
-    # face = False
+
     if(not dbHelper.getImageFromAzureBlob(filename, PICTURE_DIR + filename)):
-        print("Failed to get image", filename)
+        msg = "Failed to get image " + filename
+        print(msg)
+        sleep(5)
         continue
 
     download_end_time = datetime.datetime.utcnow()
