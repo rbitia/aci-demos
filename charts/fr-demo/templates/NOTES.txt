@@ -1,7 +1,7 @@
 1. Get the application URL by running these commands:
 {{- if .Values.frontend.ingress.enabled }}
 {{- range .Values.frontend.ingress.hosts }}
-  http://{{ . }}
+  https://{{ . }}
 {{- end }}
 {{- else if contains "NodePort" .Values.frontend.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "fullname" . }}-frontend)
