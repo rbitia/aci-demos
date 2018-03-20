@@ -1,5 +1,6 @@
 # aci-demos
-Demos with ACI
+
+## Demos with ACI
 
 Description: Run a facial recognition demo across your AKS cluster and use ACI and the ACI Connector to burst into for on-demand compute.
 
@@ -7,7 +8,8 @@ Contact ria.bhatia@microsoft.com if you need help!
 
 steps to deploy dis demo & talking tips
 
-Part 0 Prerequisites
+### Part 1 Prerequisites
+
 In order to run this demo, you will need the following:
 
 - An active [Microsoft Azure](https://azure.microsoft.com/en-us/free "Microsoft Azure") Subscription
@@ -15,8 +17,9 @@ In order to run this demo, you will need the following:
 - [Kubernetes CLI (kubectl)](https://kubernetes.io/docs/tasks/tools/install-kubectl/ "Kubernetes CLI (kubectl)") installed
 - [Helm client](https://docs.helm.sh/using_helm/#installing-helm) installed
 
-Part 1 Setup
+### Part 2 Setup
 Replace `<myResourceGroup>` with your expected and run following command to create resource group. Then remember the created resource group name.
+
 ```
 $ az group create --name <myResourceGroup> --location eastus
 ```
@@ -24,17 +27,20 @@ $ az group create --name <myResourceGroup> --location eastus
 > **Note:** The AKS extending to ACI only support in one location. So far AKS and ACI are both deployed to East US and West Europe. So please create your resource group in East US or West Europe only.
 
 Replace `<myResourceGroup>`,`<myK8sCluster>` with your expected and run following command to create the AKS. Then remember the AKS name.
+
 ```
 $ az aks create --resource-group <myResourceGroup> --name <myK8sCluster> --node-count 1 --generate-ssh-keys
 
 ```
 
 Replace `<myResourceGroup>`, `<myK8sCluster>` with your created in previous steps and run following command to set the AKS as your current connected cluster.
+
 ```
 $ az aks get-credentials --resource-group <myResourceGroup> --name <myK8sCluster>
 ```
 
 Make sure you're connected.
+
 ```
 $ kubectl get nodes
 ```
@@ -51,11 +57,13 @@ $ helm install stable/kube-lego --name kube-lego --namespace kube-system --set c
 ```
 
 Install ingress controller w/ helm.
+
 ```
 $ helm install stable/nginx-ingress --name ingress --namespace kube-system
 ```
 
 Get the Public IP of the ingress controller. It may take some times for the IP assigned to the services
+
 ```
 $ kubectl get services --namespace kube-system --watch
 ```
@@ -72,7 +80,8 @@ Change the folder to the root of the source code
 $ cd aci-demo
 ```
 
-Replace `<myResourceGroup>`, `<IP Address>` with your created in previous steps. Replace `<appName>` with your expected and run following shell script to bind FQDN to your IP. Remember the return name. You will use it to access the web application later.
+Replace `<myResourceGroup>`, `<IP Address>` with your created in previous steps. Replace `<appName>` with your expected and run following shell script to bind FQDN to your IP. Remember the return FQDN name. You will use it to update your configuration file.
+
 ```
 $ assignFQDNtoIP.sh -g <myResourceGroup> -d <appName> -i <IP Address>
 
@@ -95,6 +104,7 @@ The rate will be super slow because we have a 1 node AKS cluster running 1 worke
 
 Deploy the ACI connector :
 Replace `<myResourceGroupmy>`, `<myK8sCluster>` with yours in previous steps and run following command
+
 ```
 az aks install-connector --resource-group <myResourceGroup> --name <myK8sCluster> --connector-name myaciconnector
 ```
