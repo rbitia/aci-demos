@@ -20,20 +20,23 @@ spec:
           imagePullPolicy: "{{ .Values.imageRecognizer.image.pullPolicy }}"
           env:
           - name: IP_JOB_SERVER
-            value: "{{ index .Values.backend.ingress.hosts 0 }}:{{ .Values.backend.service.externalPort }}"
+            value: "{{ if .Values.backend.ingress.hostIP }}
+            {{- .Values.backend.ingress.hostIP -}}
+                    {{ else }}
+            {{- index .Values.backend.ingress.hosts 0 -}}
+                    {{ end -}}
+            :{{- .Values.backend.service.externalPort -}}"
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
           - name: PYTHONUNBUFFERED
             value: "0"
           resources:
             requests:
-              memory: 1G
+              memory: 1.5G
               cpu: 1
           volumeMounts:
           - mountPath: /Pics
             name: pic-volume
-      imagePullSecrets: 
-          - name: myacrkey
       volumes:
       - name: pic-volume
         emptyDir: {}

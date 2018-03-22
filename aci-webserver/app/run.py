@@ -10,17 +10,17 @@ import json
 import sqlite3
 import requests
 from datetime import datetime
+from datetime import timedelta
 import os
-from dbAzureBlob import DbAzureBlob
+from dbAzureBlob import DbAzureBlob, DATABASE_NAME
 
 import logging
 from logging.handlers import RotatingFileHandler
+import urllib
 
 app = Flask(__name__)
 
-DATABASE_NAME = 'jobs.db'
-
-@app.route('/')
+@app.route('/api')
 def index():
     dbHelper = DbAzureBlob()
 
@@ -33,49 +33,37 @@ def index():
     row = conn.execute("SELECT * FROM jobs WHERE processed = 0 ORDER BY RANDOM() LIMIT 1").fetchone()
 
     if(row == None ):
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("UPDATE time set finished = 1, finish_time = \""+ current_time +"\" where id = 1;")
-        conn.commit()
-    
         return json.dumps({
             'filename':"NULL",
             'processed':1,
         })
 
-    cursor = conn.execute("SELECT * FROM time WHERE id = 1;")
-
-    if(cursor.fetchone()[4] == 0):
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("UPDATE time set started = 1, start_time = \""+ current_time +"\" where id = 1;")
-        conn.commit()
-
     id = row[0]
     filename = row[1]
-
-    conn.execute("UPDATE jobs set processed = 1 where id = " + str(id) + ";" )
-    conn.commit()
-
     conn.close()
 
-    return Response(json.dumps({'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
+    return Response(json.dumps({'id': id, 'filename': filename, 'processed': 0 }), status=200, mimetype='application/json')
 
+@app.route('/api/test')
+def liveTest():
+    return Response(json.dumps({'status': 'ok!'}), status=200, mimetype='application/json')
 
-@app.route('/processed')
+@app.route('/api/processed')
 def processed():
     if not os.path.isfile(DATABASE_NAME):
         DbAzureBlob().setupDatabase()
 
     conn = sqlite3.connect(DATABASE_NAME)
-    filename = request.args.get('filename')
+    id = request.args.get('id')
+    filename = urllib.parse.unquote(request.args.get('filename'))
     detected = request.args.get('detected')
-
+    start_time = request.args.get('start_time')
+    end_time = request.args.get('end_time')
+    worker_id = request.args.get('worker_id')
     if(filename == None or detected == None):
         return json.dumps({"success":True,"status_code":200})
 
-    if(detected == "true"):
-        conn.execute("UPDATE jobs set detected = 1 where filename = \"" + filename + "\";" )
-    else:
-        conn.execute("UPDATE jobs set detected = 0 where filename = \"" + filename + "\";" )
+    conn.execute("UPDATE jobs set detected = ? , start_time = ? , end_time = ? , worker_id = ? where filename = ?", (str2bool(detected), start_time, end_time, worker_id, filename ) )
 
     conn.commit()
 
@@ -83,7 +71,7 @@ def processed():
     return json.dumps({"success":True,"status_code":200})
 
 
-@app.route('/resetDb')
+@app.route('/api/resetDb')
 def resetDb():
     ''' Use to delete the cache db and start the process again'''
     os.remove(DATABASE_NAME)
@@ -91,46 +79,79 @@ def resetDb():
     return json.dumps({"success":True,"status_code":200})
 
 
-@app.route('/reuseDb')
+@app.route('/api/reuseDb')
 def reuseDb():
     
     if not os.path.isfile(DATABASE_NAME):
         return  request.args.get('callback') + "(" +  json.dumps({"success":False}) + ")"
 
     conn = sqlite3.connect(DATABASE_NAME)
-    conn.execute("UPDATE jobs set detected = NULL, processed = 0;" )
-    conn.execute("UPDATE time set started = 0, finished = 0;" )
+    conn.execute("UPDATE jobs set detected = NULL, start_time = NULL, end_time = NULL, processed = 0, worker_id = NULL, processed_time = NULL;" )
     conn.commit()
 
-    time_data = conn.execute("select * from time where id = 1;").fetchone()
-
-    return json.dumps(time_data)
+    return json.dumps({"success": True})
     #return  request.args.get('callback') + "(" +  json.dumps({"success":True}) + ")"
 
-@app.route('/getProgress')
-def getProgress():
+@app.route('/api/getFile')
+def getFile():
     if not os.path.isfile(DATABASE_NAME):
         DbAzureBlob().setupDatabase()
 
-    current_time = datetime.now()
+    conn = sqlite3.connect(DATABASE_NAME)
+    
+    timeout_time = datetime.utcnow() - timedelta(seconds=45)
+    row = conn.execute("SELECT * FROM jobs WHERE processed = 0 or (processed = 1 and detected is NULL and processed_time < ?) ORDER BY RANDOM() LIMIT 1 ;", (timeout_time,)).fetchone()
+
+    if(row == None ):
+        return json.dumps({
+            'filename':"NULL",
+            'processed':1,
+        })
+
+    id = row[0]
+    filename = row[1]
+
+    conn.execute("UPDATE jobs set processed = 1, processed_time = ? where id = ? ;", (datetime.utcnow(), id))
+    conn.commit()
+
+    conn.close()
+
+    return Response(json.dumps({'id': id, 'filename': filename, 'processed': 0}), status=200, mimetype='application/json')
+    
+
+@app.route('/api/getProgress')
+def getProgress():
+    if not os.path.isfile(DATABASE_NAME):
+        DbAzureBlob().setupDatabase()
+    req_start_time = datetime.utcnow()
+
+    TIME_SPAN = 30
+    processed_count = 0
+    total_time = 0
+    current_time = datetime.utcnow()
 
     conn = sqlite3.connect(DATABASE_NAME)
-    cursor = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;")
-    time_data = conn.execute("SELECT * FROM time WHERE id = 1;").fetchone()
+    total_rows = conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
+    rows = conn.execute("SELECT * FROM jobs WHERE detected IS NOT NULL;").fetchall()
+    if len(rows) > 0 :
+        time_range = conn.execute("SELECT MIN(start_time), MAX(end_time) from jobs WHERE detected IS NOT NULL;").fetchone()
+        start_time = datetime.strptime(time_range[0], '%Y-%m-%d %H:%M:%S.%f')
+        interval_start_time = current_time - timedelta(seconds=TIME_SPAN) 
+        processed_count = conn.execute("SELECT COUNT(*) FROM jobs WHERE detected IS NOT NULL AND end_time > ? ;", (str(interval_start_time),)).fetchone()[0]
+    conn.close()
 
-    start_time = datetime.strptime(time_data[1],'%Y-%m-%d %H:%M:%S')
+    speed = processed_count / TIME_SPAN
 
-    if(time_data[3] == 1):
-        current_time = datetime.strptime(time_data[2],'%Y-%m-%d %H:%M:%S')
-
-    total_time = (current_time - start_time).total_seconds()
-
-    if time_data[4] == 0:
+    if (len(rows) == 0):
         total_time = 0
+    elif (len(rows) != total_rows):
+        total_time = (current_time - start_time).total_seconds()
+    else:
+        total_time = (datetime.strptime(time_range[1], '%Y-%m-%d %H:%M:%S.%f') - start_time).total_seconds()
 
     pictures = []
 
-    for row in cursor:
+    for row in rows:
         obj = {
             "filename": row[1],
             "detected": row[3]
@@ -140,12 +161,19 @@ def getProgress():
     data = {
         "success": True,
         "pictures": pictures,
-        "total_time": int(total_time)
+        "speed": speed,
+        "speed_time": str(current_time),
+        "total_period": int(total_time)
     }
 
     json_data = json.dumps(data)
 
+    req_end_time = datetime.utcnow()
+    print("request spend: " + str((req_start_time - req_end_time).total_seconds()))
     return json_data 
+
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1")
 
 
 if __name__ == '__main__':

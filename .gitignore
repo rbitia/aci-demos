@@ -1,2 +1,6 @@
 .env
+**/__pycache__/
 **/logs/
+**/jobs.db
+.*
+aci-webserver/app/__pycache__/

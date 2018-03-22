@@ -22,18 +22,26 @@ spec:
           env:
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
+          - name: DB_PATH
+            value: "/app_db/"
+          volumeMounts: 
+          - mountPath: /app_db
+            name: db-volume
           ports:
             - containerPort: {{ .Values.backend.service.internalPort }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/test
               port: {{ .Values.backend.service.internalPort }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /api
               port: {{ .Values.backend.service.internalPort }}
           resources:
 {{ toYaml .Values.backend.resources | indent 12 }}
+      volumes:
+      - name: db-volume
+        emptyDir: {}
     {{- if .Values.backend.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.backend.nodeSelector | indent 8 }}

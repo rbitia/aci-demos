@@ -20,11 +20,11 @@ spec:
           imagePullPolicy: "{{ .Values.imageRecognizer.image.pullPolicy }}"
           env:
           - name: IP_JOB_SERVER
-            value: "{{ include "fullname" . }}-{{ .Values.backend.service.name }}:{{ .Values.backend.service.externalPort }}"
+            value: "{{ template "fullname" . }}-backend:{{ .Values.backend.service.externalPort }}"
+          - name: SERVER_PATH
+            value: ""
           - name: AZURE_BLOB_ACCOUNT
             value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
-          - name: AZURE_BLOB_KEY
-            value: "{{ .Values.imageRecognizer.azureBlob.key }}"
           - name: PYTHONUNBUFFERED
             value: "0"          
           volumeMounts:
