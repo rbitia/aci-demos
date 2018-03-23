@@ -11,7 +11,7 @@ and the experimental ACI-connector -->
     <link rel="icon" type="image/png" sizes="96x96" href="/static/dashboard/assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <title>Paper Dashboard by Creative Tim</title>
+    <title>Facial Recognition App</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -37,12 +37,26 @@ and the experimental ACI-connector -->
     <link href="/static/dashboard/assets/css/themify-icons.css" rel="stylesheet">
 
     <style>
+        .navbar-default, .main-panel {
+            background-color: #ddabe9;
+        }
         .main-card {
             background: #eee;
         }
-
+        .icon-folder-color{
+            color: #ff8c00
+        }
         #modal-box {
             width: 1090px;
+        }
+        html, body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, p, .navbar, .brand, a, .td-name, td {
+            font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif
+        }
+        .microsoft-logo {
+            background-image: url("/static/dashboard/assets/img/Microsoft-Logo-PNG.png");
+            background-size: 216px 80px;
+            width: 216px;
+            height: 80px;
         }
     </style>
 
@@ -62,7 +76,7 @@ and the experimental ACI-connector -->
                             <span class="icon-bar bar2"></span>
                             <span class="icon-bar bar3"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Dashboard</a>
+                        <a class="navbar-brand" href="#">Facial Recognition App</a>
                         <button id="reset-btn" type="button" class="btn btn-outline-secondary">Reset Database</button>
                     </div>
                 </div>
@@ -163,7 +177,7 @@ and the experimental ACI-connector -->
                                                 <div class="content">
                                                     <div class="row">
                                                         <div class="col-xs-5">
-                                                            <div class="icon-big icon-danger text-center">
+                                                            <div class="icon-big icon-folder-color text-center">
                                                                 <i class="ti-folder"></i>
                                                             </div>
                                                         </div>
@@ -181,7 +195,7 @@ and the experimental ACI-connector -->
                                                 <div class="content">
                                                     <div class="row">
                                                         <div class="col-xs-5">
-                                                            <div class="icon-big icon-danger text-center">
+                                                            <div class="icon-big icon-folder-color text-center">
                                                                 <i class="ti-folder"></i>
                                                             </div>
                                                         </div>
@@ -224,8 +238,11 @@ and the experimental ACI-connector -->
                         </ul>
                     </nav>
                     <div class="copyright pull-right">
-                        &copy; Samuel Kreter with base by
-                        <a href="//www.creative-tim.com">Creative Tim</a>
+                        <div class="microsoft-logo" title="Microsoft"></div>
+                        <div>
+                            &copy; Samuel Kreter with base by
+                            <a href="//www.creative-tim.com">Creative Tim</a>
+                        </div>
                     </div>
                 </div>
             </footer>
@@ -448,7 +465,7 @@ and the experimental ACI-connector -->
                     label: "Picture Process Rate",
                     fill: false,
                     yAxisID: 'y-axis-1',
-                    borderColor: 'rgb(128,0,128)',
+                    borderColor: '#6917aa',
                     data: [],
                 }]
             },
