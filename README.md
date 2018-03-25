@@ -30,7 +30,6 @@ Replace `<myResourceGroup>`,`<myK8sCluster>` with your expected and run followin
 
 ```
 $ az aks create --resource-group <myResourceGroup> --name <myK8sCluster> --node-count 1 --generate-ssh-keys
-
 ```
 
 Replace `<myResourceGroup>`, `<myK8sCluster>` with your created in previous steps and run following command to set the AKS as your current connected cluster.
@@ -83,14 +82,13 @@ $ cd aci-demo
 Replace `<myResourceGroup>`, `<IP Address>` with your created in previous steps. Replace `<appName>` with your expected and run following shell script to bind FQDN to your IP. Remember the return FQDN name. You will use it to update your configuration file.
 
 ```
-$ assignFQDNtoIP.sh -g <myResourceGroup> -d <appName> -i <IP Address>
-
+$ chmod u+x assignFQDNtoIP.sh
+$ ./assignFQDNtoIP.sh -g <myResourceGroup> -d <appName> -i <IP Address>
 ```
 
 Edit the values.yaml file and replace all `<host name>` with the FQDN name in pervious step.
 ```
-$ cd aci-demos/charts/fr-demo/  
-$ vim values.yaml
+$ vim ./charts/fr-demo/values.yaml 
 ```
 
 Start at the top of the aci-demos directory and deploy the Facial Recognition application that consists of a frontend, a backend, and a set of image recognizers.
@@ -128,13 +126,17 @@ This is powerful stuff.  Here we can see AKS and ACI combine to provide the bes
 Once you've done all the set up you just need these commands during the live demo:
 ```
 $ helm install charts/fr-demo --name demo
-$ az aks install-connector --resource-group myResourceGroup --name myK8sCluster --connector-name myaciconnector
+$ az aks install-connector --resource-group <myResourceGroup> --name <myK8sCluster> --connector-name myaciconnector
 $ kubectl scale deploy demo-fr-ir-aci --replicas 10
 ```
 
 
-To clean up:
+### Part 3 Clean up:
+
+Replace `<myResourceGroup>`, `<myK8sCluster>` with your created in previous steps. Then run following command to clean up resources
+
 ```
 $ helm del --purge demo
-$ az aks remove-connector --resource-group myResourceGroup --name myAKSCluster --connector-name myaciconnector
+$ az aks remove-connector --resource-group <myResourceGroup> --name <myK8sCluster> --connector-name myaciconnector
+$ az group delete --resource-group <myResourceGroup> --no-wait -y
 ```
