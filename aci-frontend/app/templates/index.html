@@ -444,6 +444,8 @@ and the experimental ACI-connector -->
     })
 
     function localTimeString(utcTime) {
+        // time format: 2018-03-26 01:53:13.907861
+        utcTime = utcTime.replace(' ', 'T');
         var utcDate = new Date(utcTime +"Z");
         return ('0' + utcDate.getHours()).slice(-2)
             + ':' + ('0' + utcDate.getMinutes()).slice(-2)
