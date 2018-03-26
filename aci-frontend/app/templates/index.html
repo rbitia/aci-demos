@@ -38,7 +38,7 @@ and the experimental ACI-connector -->
 
     <style>
         .navbar-default, .main-panel {
-            background-color: #ddabe9;
+            background-color: #fefcff;
         }
         .main-card {
             background: #eee;
@@ -54,9 +54,9 @@ and the experimental ACI-connector -->
         }
         .microsoft-logo {
             background-image: url("/static/dashboard/assets/img/Microsoft-Logo-PNG.png");
-            background-size: 216px 80px;
-            width: 216px;
-            height: 80px;
+            background-size: 270px 100px;
+            width: 270px;
+            height: 100px;
         }
     </style>
 
@@ -78,6 +78,9 @@ and the experimental ACI-connector -->
                         </button>
                         <a class="navbar-brand" href="#">Facial Recognition App</a>
                         <button id="reset-btn" type="button" class="btn btn-outline-secondary">Reset Database</button>
+                    </div>
+                    <div class="pull-right">
+                        <div class="microsoft-logo" title="Microsoft"></div>
                     </div>
                 </div>
             </nav>
@@ -238,11 +241,8 @@ and the experimental ACI-connector -->
                         </ul>
                     </nav>
                     <div class="copyright pull-right">
-                        <div class="microsoft-logo" title="Microsoft"></div>
-                        <div>
                             &copy; Samuel Kreter with base by
                             <a href="//www.creative-tim.com">Creative Tim</a>
-                        </div>
                     </div>
                 </div>
             </footer>
@@ -444,6 +444,8 @@ and the experimental ACI-connector -->
     })
 
     function localTimeString(utcTime) {
+        // time format: 2018-03-26 01:53:13.907861
+        utcTime = utcTime.replace(' ', 'T');
         var utcDate = new Date(utcTime +"Z");
         return ('0' + utcDate.getHours()).slice(-2)
             + ':' + ('0' + utcDate.getMinutes()).slice(-2)
