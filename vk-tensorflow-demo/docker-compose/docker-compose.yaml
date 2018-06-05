@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: rbitia/tensorweb
+    ports:
+    - "8080:80"
+  worker:
+    build: rbitia/tensorworker
+    environment:
+      API_BASE_URL: "http://rbitia"
