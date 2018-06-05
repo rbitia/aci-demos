@@ -1,0 +1,108 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location of the resources."
+      }
+    },
+    "workerReplicas": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "webImage": {
+      "type": "string",
+      "defaultValue": "anthonychu/imageclassifierweb:0.7"
+    },
+    "workerImage": {
+      "type": "string",
+      "defaultValue": "anthonychu/imageclassifierworker:0.2"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-03-01-privatepreview",
+      "name": "ImageClassifier",
+      "type": "Microsoft.ServiceFabric/applications",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+      ],
+      "properties": {
+        "description": "Image Classifier App",
+        "services": [
+          {
+            "name": "ImageClassifierWeb",
+            "properties": {
+              "description": "Image Classifier Web service",
+              "osType": "linux",
+              "codePackages": [
+                {
+                  "name": "ImageClassifierWeb.Code",
+                  "image": "[parameters('webImage')]",
+                  "endpoints": [
+                    {
+                      "name": "Endpoint1",
+                      "port": 80
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": 1,
+                      "memoryInGB": 1
+                    }
+                  }
+                }
+              ],
+              "replicaCount": 1,
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabric/networks', 'ImageClassifierNetwork')]"
+                }
+              ]
+            }
+          },
+          {
+            "name": "ImageClassifierWorker",
+            "properties": {
+              "description": "Image Classifier Worker service",
+              "osType": "linux",
+              "codePackages": [
+                {
+                  "name": "ImageClassifierWorker.Code",
+                  "image": "[parameters('workerImage')]",
+                  "volumeRefs": [
+                    {
+                      "name": "[resourceId('Microsoft.ServiceFabric/volumes', 'fruitshare')]",
+                      "destinationPath": "/app/assets/images"
+                    }
+                  ],
+                  "environmentVariables": [
+                    {
+                      "name": "API_BASE_URL",
+                      "value": "http://ImageClassifierWeb"
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": 0.5,
+                      "memoryInGB": 0.5
+                    }
+                  }
+                }
+              ],
+              "replicaCount": "[parameters('workerReplicas')]",
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabric/networks', 'ImageClassifierNetwork')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

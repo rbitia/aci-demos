@@ -1,0 +1,64 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location of the resources."
+      }
+    },
+    "shareName": {
+      "type": "string",
+      "defaultValue": "fruit"
+    },
+    "accountName": {
+      "type": "string",
+      "defaultValue": "sbzfileshare"
+    },
+    "accountKey": {
+      "type": "securestring",
+      "defaultValue": "OmTO0iwiaVeP/My0I1z+czEbpxQ5GUi/FOuA0voH4sxxWIwP9QT7kTPY28DniZ4VJfCU1Kpyn8qbcWXqRYtXnA=="
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-03-01-privatepreview",
+      "name": "fruitshare",
+      "type": "Microsoft.ServiceFabric/volumes",
+      "location": "[parameters('location')]",
+      "properties": {
+        "description": "File share backed by Azure Files storage.",
+        "provider": "SFAzureFile",
+        "azureFileParameters": {
+          "shareName": "[parameters('shareName')]",
+          "accountName": "[parameters('accountName')]",
+          "accountKey": "[parameters('accountKey')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01-privatepreview",
+      "name": "ImageClassifierNetwork",
+      "type": "Microsoft.ServiceFabric/networks",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "Private network for application",
+        "addressPrefix": "10.0.0.4/22",
+        "ingressConfig": {
+          "qosLevel": "bronze",
+          "layer4": [
+            {
+              "publicPort": "80",
+              "applicationName": "ImageClassifier",
+              "serviceName": "ImageClassifierWeb",
+              "endpointName": "Endpoint1"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

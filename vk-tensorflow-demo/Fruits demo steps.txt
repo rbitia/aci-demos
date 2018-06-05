@@ -1,0 +1,18 @@
+Fruits
+#### Create Resource group
+az group create --name madhan-demo --location eastus
+    #### Deploy base
+az mesh deployment create --resource-group madhan-demo --template-file ./fruits/sfdeploy-base.json
+    #### Deploy app (1 min)
+az mesh deployment create --resource-group madhan-demo --template-file ./fruits/sfdeploy-app.json    
+    #### Get public ip
+az mesh network list --resource-group madhan-demo
+ 
+ALL OF THE ABOVE IS DONE – browse to the app here: http://40.121.22.183 
+ 
+### Scale out
+    #### Scaleout to ten instances (Will show up in 20 - 50 seconds – will complete in 3:30 minutes)
+az mesh deployment create --resource-group madhan-demo --template-file ./fruits/sfdeploy-app.json --parameters '{ "workerReplicas" :  { "value" : 10 } }'
+ 
+   ### Clean up
+az mesh deployment create --resource-group madhan-demo --template-file ./fruits/sfdeploy-app.json

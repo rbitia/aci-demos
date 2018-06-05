@@ -1,0 +1,55 @@
+# Default values for tensorflow.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imageRecognizer:
+  replicaCount:
+    pods: 1
+  image:
+    repository: rbitia/tensorworker
+    tag: latest
+    pullPolicy: Always
+  resources:
+    limits:
+     cpu: 500m
+     memory: 0.5G
+    requests:
+     cpu: 500m
+     memory: 0.5G
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: rbitia/tensorweb
+    tag: latest
+    pullPolicy: Always
+  service:
+    name: frontend
+    type: ClusterIP
+    externalPort: 8080
+    internalPort: 8080
+  ingress:
+    enabled: true
+    # Used to create an Ingress record.
+    # When use IP access, comment hosts node
+    hosts:
+      - rbitia.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    tls:
+      # Secrets must be manually created in the namespace.
+      - secretName: rbitia-com
+        hosts:
+          - rbitia.com
+  resources:
+    limits:
+     cpu: 1000m
+     memory: 1.0G
+    requests:
+     cpu: 1000m
+     memory: 1.0G
+
+
+
