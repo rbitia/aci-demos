@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "fullname" . }}-ir-aci
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.imageRecognizer.replicaCount.aci }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "fullname" . }}-ir-aci
+    spec:
+      containers:
+        - name: {{ include "fullname" . }}-ir-aci
+          image: "{{ .Values.imageRecognizer.image.repository }}:{{ .Values.imageRecognizer.image.tag }}"
+          imagePullPolicy: "{{ .Values.imageRecognizer.image.pullPolicy }}"
+          env:
+          - name: IP_JOB_SERVER
+            value: "{{ if .Values.backend.ingress.hostIP }}
+            {{- .Values.backend.ingress.hostIP -}}
+                    {{ else }}
+            {{- index .Values.backend.ingress.hosts 0 -}}
+                    {{ end -}}
+            :{{- .Values.backend.service.externalPort -}}"
+          - name: AZURE_BLOB_ACCOUNT
+            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
+          - name: PYTHONUNBUFFERED
+            value: "0"
+          resources:
+            requests:
+              memory: 1.5G
+              cpu: 1
+          volumeMounts:
+          - mountPath: /Pics
+            name: pic-volume
+      volumes:
+      - name: pic-volume
+        emptyDir: {}
+      dnsPolicy: ClusterFirst
+      nodeName: virtual-kubelet-myaciconnector-linux 
+      tolerations:
+      - key: azure.com/aci
+        effect: NoSchedule

@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-frontend
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}-frontend
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: "{{ .Values.frontend.image.pullPolicy }}"
+          env:
+          - name: IP_JOB_SERVER
+            value: "{{ template "fullname" . }}-backend:{{ .Values.backend.service.externalPort }}"
+          - name: AZURE_BLOB_ACCOUNT
+            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
+          ports:
+            - containerPort: {{ .Values.frontend.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.frontend.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.frontend.service.internalPort }}
+          resources:
+{{ toYaml .Values.frontend.resources | indent 12 }}
+    {{- if .Values.frontend.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.frontend.nodeSelector | indent 8 }}
+    {{- end }}
