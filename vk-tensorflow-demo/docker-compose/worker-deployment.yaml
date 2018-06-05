@@ -20,8 +20,8 @@ spec:
       containers:
       - env:
         - name: API_BASE_URL
-          value: http://rbitia
-        image: worker
+          value: http://rbitia.com
+        image: rbitia/tensorworker
         name: worker
         resources: {}
       restartPolicy: Always

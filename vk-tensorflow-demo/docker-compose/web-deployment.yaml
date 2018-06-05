@@ -18,7 +18,7 @@ spec:
         io.kompose.service: web
     spec:
       containers:
-      - image: web
+      - image: rbitia/tensorweb
         name: web
         ports:
         - containerPort: 80

@@ -12,7 +12,7 @@ spec:
   ports:
   - name: "8080"
     port: 8080
-    targetPort: 80
+    targetPort: 8080
   selector:
     io.kompose.service: web
 status:
