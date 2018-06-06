@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "tensorstuff.fullname" . }}
+  labels:
+    app: {{ template "tensorstuff.name" . }}
+    chart: {{ template "tensorstuff.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "tensorstuff.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "tensorstuff.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
