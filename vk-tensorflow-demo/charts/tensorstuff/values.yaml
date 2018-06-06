@@ -2,6 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+workerReplicaCount: 1
+workerImage:
+  repository: rbitia/tensorworker
+  tag: latest
+  pullPolicy: IfNotPresent
+
+workerService:
+  type: ClusterIP
+  port: 80
+
+
 replicaCount: 1
 
 image:
