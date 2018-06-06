@@ -29,7 +29,7 @@ spec:
               protocol: TCP
           env:
             - name: API_BASE_URL
-              value: "fi.rbitia.com"
+              value: "https://fi.rbitia.com"
           volumesMounts:
             - mountPath: /app/assets/images
               name: fruitshare
