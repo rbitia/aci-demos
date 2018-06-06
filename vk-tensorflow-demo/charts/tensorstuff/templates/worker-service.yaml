@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "tensorstuff.fullname"-worker . }}
+  name: {{ template "tensorstuff.name" . }}-worker
   labels:
-    app: {{ template "tensorstuff.name"-worker . }}
-    chart: {{ template "tensorstuff.chart"-worker . }}
+    app: {{ template "tensorstuff.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.worker.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.worker.service.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    app: {{ template "tensorstuff.name"-worker . }}
+    app: {{ template "tensorstuff.name" . }}-worker 
     release: {{ .Release.Name }}

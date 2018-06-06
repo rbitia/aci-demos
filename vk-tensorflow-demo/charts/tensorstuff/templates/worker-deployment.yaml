@@ -1,9 +1,9 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ template "tensorstuff.fullname"-worker . }}
+  name: {{ template "tensorstuff.fullname" . }}-worker 
   labels:
-    app: {{ template "tensorstuff.name"-worker . }}
+    app: {{ template "tensorstuff.name" . }}
     chart: {{ template "tensorstuff.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -11,22 +11,22 @@ spec:
   replicas: {{ .Values.workerReplicaCount }}
   selector:
     matchLabels:
-      app: {{ template "tensorstuff.name"-worker . }}
+      app: {{ template "tensorstuff.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "tensorstuff.name"-worker . }}
+        app: {{ template "tensorstuff.name" . }}
         release: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.workerImage.repository }}:{{ .Values.workerImage.tag }}"
-          imagePullPolicy: {{ .Values.workerImage.pullPolicy }}
+          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
-        - env:
+          env:
             - name: API_BASE_URL
-            value: {{ template "tensorstuff.fullname"-worker . }}
+              value: "http://web"

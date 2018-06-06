@@ -1,20 +1,7 @@
 # Default values for tensorstuff.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-workerReplicaCount: 1
-workerImage:
-  repository: rbitia/tensorworker
-  tag: latest
-  pullPolicy: IfNotPresent
-
-workerService:
-  type: ClusterIP
-  port: 80
-
-
 replicaCount: 1
-
 image:
   repository: rbitia/tensorweb
   tag: latest
@@ -23,16 +10,32 @@ image:
 service:
   type: ClusterIP
   port: 80
-
+  
 ingress:
-  enabled: enabled
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  path: /
-  hosts:
-    - <host>
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    enabled: true
+    # Used to create an Ingress record.
+    # When use IP access, comment hosts node
+    hosts:
+      - rbitia.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    tls:
+      # Secrets must be manually created in the namespace.
+      - secretName: rbitia-com
+        hosts:
+          - rbitia.com
+
+worker:
+  replicaCount:
+    pods: 1
+  image:
+    repository: rbitia/tensorworker
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    name: worker
+    type: ClusterIP
+    port: 80
+  
