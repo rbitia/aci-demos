@@ -29,14 +29,14 @@ spec:
               protocol: TCP
           env:
             - name: API_BASE_URL
-              value: "http://ImageClassifierWeb"
+              value: "https://fi.rbitia.com"
           volumesMounts:
             - mountPath: /app/assets/images
               name: fruitshare
       volumes: 
         - name: {{ .Chart.Name }}
           azureFile:
-            secretName: picture-secret
+            secretName: azure-secret
             shareName: fruit
             readOnly: false
       dnsPolicy: ClusterFirst
