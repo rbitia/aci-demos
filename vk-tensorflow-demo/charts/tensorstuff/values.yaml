@@ -20,12 +20,12 @@ ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     tls:
       # Secrets must be manually created in the namespace.
-      - secretName: rbitia-com
+      - secretName: fi-rbitia-com
         hosts:
-          - rbitia.com
+          - fi.rbitia.com
 
 worker:
   replicaCount:

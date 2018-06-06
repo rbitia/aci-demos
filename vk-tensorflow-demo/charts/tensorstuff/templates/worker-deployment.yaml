@@ -29,7 +29,7 @@ spec:
               protocol: TCP
           env:
             - name: API_BASE_URL
-              value: "fi.rbitia.com"
+              value: "http://{{ template "tensorstuff.fullname" . }}"
           volumesMounts:
             - mountPath: /app/assets/images
               name: fruitshare
