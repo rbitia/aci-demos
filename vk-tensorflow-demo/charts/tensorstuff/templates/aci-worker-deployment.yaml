@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.workerReplicaCount }}
+  replicas: {{ .Values.worker.replicaCount.aci }}
   selector:
     matchLabels:
       app: {{ template "tensorstuff.name" . }}
@@ -39,10 +39,10 @@ spec:
             secretName: picture-secret
             shareName: fruit
             readOnly: false
-     dnsPolicy: ClusterFirst
-     nodeSelector:
-       kubernetes.io/hostname: virtual-kubelet-myaciconnector-linux
-     tolerations:
-     - key: azure.com/aci
-       effect: NoSchedule
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: virtual-kubelet-myaciconnector-linux
+      tolerations:
+      - key: azure.com/aci
+        effect: NoSchedule
     
