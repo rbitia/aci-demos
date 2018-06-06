@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ template "tensorstuff.fullname" . }}-worker 
+  name: {{ template "tensorstuff.fullname" . }}-aci-worker 
   labels:
     app: {{ template "tensorstuff.name" . }}
     chart: {{ template "tensorstuff.chart" . }}
@@ -39,3 +39,10 @@ spec:
             secretName: picture-secret
             shareName: fruit
             readOnly: false
+     dnsPolicy: ClusterFirst
+     nodeSelector:
+       kubernetes.io/hostname: virtual-kubelet-myaciconnector-linux
+     tolerations:
+     - key: azure.com/aci
+       effect: NoSchedule
+    
