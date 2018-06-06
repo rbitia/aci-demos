@@ -30,6 +30,7 @@ ingress:
 worker:
   replicaCount:
     pods: 1
+    aci: 0
   image:
     repository: rbitia/tensorworker
     tag: latest
