@@ -29,13 +29,13 @@ spec:
               protocol: TCP
           env:
             - name: API_BASE_URL
-              value: "http://{{ template "tensorstuff.fullname" . }}"
-          volumesMounts:
+              value: "https://fi.rbitia.com"
+          volumeMounts:
             - mountPath: /app/assets/images
               name: fruitshare
       volumes: 
         - name: {{ .Chart.Name }}
           azureFile:
             secretName: azure-secret
-            shareName: fruit
+            shareName: fruitshare
             readOnly: false
