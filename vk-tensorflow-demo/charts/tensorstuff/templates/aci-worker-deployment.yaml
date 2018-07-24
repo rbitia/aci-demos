@@ -30,14 +30,14 @@ spec:
           env:
             - name: API_BASE_URL
               value: "https://fi.rbitia.com"
-          volumesMounts:
+          volumeMounts:
             - mountPath: /app/assets/images
               name: fruitshare
       volumes: 
         - name: {{ .Chart.Name }}
           azureFile:
             secretName: azure-secret
-            shareName: fruit
+            shareName: fruitshare
             readOnly: false
       dnsPolicy: ClusterFirst
       nodeSelector:
