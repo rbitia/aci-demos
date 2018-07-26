@@ -15,7 +15,7 @@ imageRecognizer:
      cpu: 500m
      memory: 1.5G
   azureBlob:
-     storageAccount: frdemo
+     storageAccount: acidemopictures
 
 # Settings for the Facial Recognizer UI
 frontend:

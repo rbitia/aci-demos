@@ -23,7 +23,7 @@ spec:
           - name: IP_JOB_SERVER
             value: "{{ template "fullname" . }}-backend:{{ .Values.backend.service.externalPort }}"
           - name: AZURE_BLOB_ACCOUNT
-            value: "{{ .Values.imageRecognizer.azureBlob.storageAccount }}"
+            value: acidemopictures
           ports:
             - containerPort: {{ .Values.frontend.service.internalPort }}
           livenessProbe:
