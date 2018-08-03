@@ -2,12 +2,11 @@ import httplib, urllib, base64, twitter, os
 from pprint import pprint
 import json
 
-
 def sentiment(scoreArray):
     headers = {
     # Request headers
     'Content-Type': 'application/json',
-    'Ocp-Apim-Subscription-Key': '<yourKey>',
+    'Ocp-Apim-Subscription-Key': '<your key>',
     }
     params = urllib.urlencode({
     })
@@ -35,15 +34,15 @@ def sentiment(scoreArray):
     #print scoreArray
     return scoreArray
 
-def tweets():
+def tweets(handle):
     api = twitter.Api(consumer_key='2sEZ4ECzxAit4ijPiApU0DZyK',
                   consumer_secret='bgb3CaTh0QENGuMT1MTp4VzXO1dBKnkivZ4cc5EfepBs0X3Lf6',
                   access_token_key='54722501-nGzzqpFE0HVNMKs4lD5PZJ7dHoebP8TTTxCGNypNi',
                   access_token_secret='W1C1ZVk3dNFyurCxs8LYtWlm6bed2ZZ8hNvEGlspJtZr5')
     twitterURL= "https://api.twitter.com/1.1/statuses/home_timeline.json"
-    user = "rbitia"
+    user = handle
     index = 0
-    statuses = api.GetUserTimeline(screen_name="rbitia")
+    statuses = api.GetUserTimeline(screen_name=user)
     f= open("tweetOutput.json","w+")
     f.write("{\n\"documents\": [\n" )
     tweets = [i.AsDict() for i in statuses]
@@ -75,19 +74,22 @@ def calculateAveTweetScore(scoreArray):
         return avg
     else:
         return 0
+def printAvg(avg):
+    return avg
 def cleanup():
     os.remove("tweetOutput.json")
     os.remove("tweetScores.json")
 
-def main():
+def main(handle):
     scoreArray = []
     array = []
-    tweets()
+    tweets(handle)
     array = sentiment(scoreArray)
     #calculateMeanTweet(scoreArray)
     #calaculateHappyTweet(scoreArray)
-    calculateAveTweetScore(array)
+    avg = calculateAveTweetScore(array)
     cleanup()
+    return avg
 
 if __name__=="__main__":
     main()
